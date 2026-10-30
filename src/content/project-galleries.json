@@ -1,0 +1,784 @@
+{
+  "furki-branding": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "06",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "07",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "08",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "09",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "10",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "11",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "12",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "13",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "14",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "15",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "16",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "17",
+      "width": 1800,
+      "height": 1012
+    },
+    {
+      "name": "18",
+      "width": 1800,
+      "height": 1012
+    }
+  ],
+  "premium-packaging": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1800
+    },
+    {
+      "name": "02",
+      "width": 1024,
+      "height": 1024
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 900
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1273
+    }
+  ],
+  "brochure-illustration": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1273
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1273
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1280
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1280
+    }
+  ],
+  "bangla-typography": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1800
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1800
+    }
+  ],
+  "book-covers": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 2164
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1168
+    }
+  ],
+  "character-portfolio": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "06",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "07",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "08",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "09",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "10",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "11",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "12",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "13",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "14",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "15",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "16",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "17",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "18",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "19",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "20",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "21",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "22",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "23",
+      "width": 1800,
+      "height": 1350
+    }
+  ],
+  "digital-detox-campaign": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1051
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2160
+    }
+  ],
+  "digital-paintings": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 2160
+    }
+  ],
+  "cities-of-bangladesh": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 2572
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2572
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 2572
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 2572
+    }
+  ],
+  "skrp-business-card": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 4320
+    }
+  ],
+  "taka-banknote-redesign": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 1244
+    },
+    {
+      "name": "02",
+      "width": 1400,
+      "height": 583
+    },
+    {
+      "name": "03",
+      "width": 1400,
+      "height": 583
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1800
+    }
+  ],
+  "movie-posters-redesign": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2520
+    }
+  ],
+  "magazine-layout": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1170
+    },
+    {
+      "name": "02",
+      "width": 1048,
+      "height": 727
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1680
+    }
+  ],
+  "product-photography": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 2700
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2700
+    }
+  ],
+  "social-media-manipulation": [
+    {
+      "name": "01",
+      "width": 1080,
+      "height": 1500
+    },
+    {
+      "name": "02",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "03",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "04",
+      "width": 1080,
+      "height": 1080
+    }
+  ],
+  "photography": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2700
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1012
+    }
+  ],
+  "packaging-design": [
+    {
+      "name": "01",
+      "width": 1102,
+      "height": 752
+    },
+    {
+      "name": "02",
+      "width": 1400,
+      "height": 1092
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1958
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "06",
+      "width": 685,
+      "height": 759
+    }
+  ],
+  "my-paintings": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "02",
+      "width": 1200,
+      "height": 674
+    },
+    {
+      "name": "03",
+      "width": 1200,
+      "height": 674
+    },
+    {
+      "name": "04",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 2160
+    }
+  ],
+  "cripto-digital-logo": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1011
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1570
+    },
+    {
+      "name": "03",
+      "width": 852,
+      "height": 695
+    }
+  ],
+  "posters": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2700
+    }
+  ],
+  "carclinic-stationery": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 1350
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 1200
+    },
+    {
+      "name": "06",
+      "width": 1400,
+      "height": 525
+    }
+  ],
+  "thumbnails": [
+    {
+      "name": "01",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "name": "02",
+      "width": 1400,
+      "height": 623
+    },
+    {
+      "name": "03",
+      "width": 1200,
+      "height": 675
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 642
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 1012
+    }
+  ],
+  "baby-basket": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "02",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "03",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "04",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "05",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "name": "06",
+      "width": 1080,
+      "height": 1080
+    }
+  ],
+  "the-blackboard": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 810
+    }
+  ],
+  "bonoya-mothers-day": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 1400
+    }
+  ],
+  "manipulations": [
+    {
+      "name": "01",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "02",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 2250
+    },
+    {
+      "name": "04",
+      "width": 1800,
+      "height": 2250
+    },
+    {
+      "name": "05",
+      "width": 1800,
+      "height": 2250
+    },
+    {
+      "name": "06",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "07",
+      "width": 1800,
+      "height": 2250
+    },
+    {
+      "name": "08",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "09",
+      "width": 1164,
+      "height": 1455
+    },
+    {
+      "name": "10",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "11",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "12",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "13",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "14",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "name": "15",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "16",
+      "width": 1400,
+      "height": 1750
+    },
+    {
+      "name": "17",
+      "width": 1800,
+      "height": 2520
+    },
+    {
+      "name": "18",
+      "width": 1800,
+      "height": 1286
+    }
+  ],
+  "foods": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "02",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "name": "03",
+      "width": 1400,
+      "height": 1400
+    },
+    {
+      "name": "04",
+      "width": 1080,
+      "height": 1080
+    }
+  ],
+  "electronics": [
+    {
+      "name": "01",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "name": "02",
+      "width": 1080,
+      "height": 1080
+    },
+    {
+      "name": "03",
+      "width": 1800,
+      "height": 1800
+    },
+    {
+      "name": "04",
+      "width": 1080,
+      "height": 1080
+    }
+  ],
+  "medical": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1800
+    }
+  ],
+  "retouches": [
+    {
+      "name": "01",
+      "width": 1800,
+      "height": 1211
+    }
+  ],
+  "cars": [
+    {
+      "name": "01",
+      "width": 1400,
+      "height": 1400
+    }
+  ]
+}
