@@ -11,7 +11,7 @@
 | Motion | `motion` 14 (`motion/react`) | `LazyMotion` + `m.*` only; `domMax` where layout/drag is needed |
 | Icons | `lucide-react` | Kept because the project already depended on it |
 | Fonts | `next/font/google` | Schibsted Grotesk (roman + italic), Geist Mono |
-| Email | Resend REST via `fetch` | Optional; honest mailto fallback |
+| Email | Nodemailer over SMTP (Namecheap Private Email) | Optional; honest mailto fallback |
 
 The bundled docs in `node_modules/next/dist/docs/` are the reference for Next 16 behaviour (see `AGENTS.md`).
 
@@ -70,8 +70,8 @@ ContactForm (client) ──form action──▶ submitInquiry (server action)
   first interaction < 2.5s ago → friendly error
   validateInquiry() → field errors, values returned so they survive React's form reset
   isRateLimited(ip) → 5 per 10 min, in memory, per instance
-  no RESEND_API_KEY / CONTACT_TO_EMAIL / CONTACT_FROM_EMAIL → "not sent yet" + prefilled mailto
-  deliverInquiry() → Resend (10s timeout) → success panel, or error with direct email
+  no SMTP_HOST / SMTP_USER / SMTP_PASS / CONTACT_TO_EMAIL / CONTACT_FROM_EMAIL → "not sent yet" + prefilled mailto
+  deliverInquiry() → Nodemailer SMTP (10s timeouts) → success panel, or error with direct email
 ```
 
 ## Environment variables
@@ -79,7 +79,7 @@ ContactForm (client) ──form action──▶ submitInquiry (server action)
 | Name | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Canonical origin (falls back to `https://musendco.com` if missing or invalid) |
-| `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | Form delivery (server only) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | Form delivery (server only) |
 
 ## Security
 

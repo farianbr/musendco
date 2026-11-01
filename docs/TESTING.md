@@ -11,6 +11,14 @@ No automated suite yet. The checks below were run manually; results are recorded
 | `npm run build` | Production build and prerender |
 | `PORT=3210 npm start` | Serve the build |
 
+## Results — 2026-11-02 (contact form SMTP delivery)
+
+| Check | Result |
+| --- | --- |
+| `tsc --noEmit`, `eslint src/lib/contact`, `next build` | Pass |
+| Contact: valid submit, local TLS SMTP server on 465 (headless Chrome, production build) | One message received with correct from, to, reply-to, subject and body; no delivery error shown |
+| Contact: valid submit, wrong SMTP password | No message sent; delivery error shown; failure logged without the password |
+
 ## Results — 2026-10-30 (dark redesign)
 
 | Check | Result |
@@ -42,4 +50,4 @@ Bug found and fixed: theme toggle and header CTA appeared on mobile because the 
 - Physical iOS/Android devices (sticky stack, swipe on testimonials).
 - Screen reader pass and axe audit.
 - Lighthouse / Core Web Vitals on a deployed URL. The home page now loads more client JS (Motion) and ~4 hero images; measure LCP before launch.
-- Resend delivery (no credentials).
+- Contact form delivery through the real SMTP mailbox (no credentials).

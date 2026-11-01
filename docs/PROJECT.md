@@ -47,7 +47,7 @@ All draft copy is original and makes no claims about clients, awards, results, h
 5. Studio location(s), if they should be public.
 6. Team members and photography, if they should be public.
 7. Testimonials, awards or client logos that may be published (with permission).
-8. Email delivery provider preference (the form ships with a Resend integration).
+8. Sending volume for the contact form (it sends through the Private Email mailbox over SMTP).
 9. Privacy policy text (needed before collecting inquiries in production).
 10. Production domain and hosting target.
 
@@ -76,7 +76,7 @@ All draft copy is original and makes no claims about clients, awards, results, h
 - [x] Data-driven projects with varied editorial layouts
 - [x] Block-based case studies with next/previous navigation
 - [x] Services, approach and process sections
-- [x] Contact form: server action, server-side validation, honeypot, timing check, rate limit, Resend delivery, honest fallback
+- [x] Contact form: server action, server-side validation, honeypot, timing check, rate limit, SMTP delivery via Nodemailer, honest fallback
 - [x] Metadata, canonical URLs, Open Graph, sitemap, robots, JSON-LD (Organization)
 - [x] Reduced-motion support and no-JS-safe reveals
 - [x] Demo photography fetcher (`scripts/fetch-demo-images.mjs`)
@@ -98,7 +98,7 @@ See `docs/CHANGELOG.md` for the history and `docs/TESTING.md` for checks that we
 - All projects, clients, people, quotes, outcomes and photography are **fictional demo content**, disclosed by a footer notice.
 - Demo photography is generic stock (picsum), graded to match; it is not project work.
 - The rate limiter is in-memory: it resets on redeploy and is per-instance on serverless hosts.
-- Without `RESEND_API_KEY`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL`, the form validates input and then hands the visitor a prefilled email instead of sending (it never claims a message was sent).
+- Without `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS`, `CONTACT_TO_EMAIL` and `CONTACT_FROM_EMAIL`, the form validates input and then hands the visitor a prefilled email instead of sending (it never claims a message was sent).
 - The wordmark is typeset text, not a supplied logo.
 
 ## Next steps

@@ -34,18 +34,21 @@ npm run dev                  # http://localhost:3000
 | Variable | Purpose |
 | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Production origin for canonical URLs, Open Graph and sitemap (defaults to `https://musendco.com`) |
-| `RESEND_API_KEY` | Resend API key for the contact form |
+| `SMTP_HOST` | SMTP server for the contact form, e.g. `mail.privateemail.com` |
+| `SMTP_PORT` | SMTP port (optional, defaults to `465`) |
+| `SMTP_USER` | Full mailbox address used to log in to SMTP |
+| `SMTP_PASS` | Mailbox password |
 | `CONTACT_TO_EMAIL` | Inbox that receives inquiries |
-| `CONTACT_FROM_EMAIL` | Verified sender address on your Resend domain |
+| `CONTACT_FROM_EMAIL` | Sender address; must be the SMTP mailbox or one of its aliases |
 
-Without the three email variables the contact form still validates input, then gives the visitor a prefilled email to send themselves. It never reports a message as sent unless delivery succeeded.
+Without the required email variables the contact form still validates input, then gives the visitor a prefilled email to send themselves. It never reports a message as sent unless delivery succeeded.
 
 ## Deployment
 
 Any Node.js host that supports Next.js 16 works; Vercel needs no extra configuration.
 
 1. Set `NEXT_PUBLIC_SITE_URL` to the production origin.
-2. Create a Resend account, verify the sending domain, and set the three email variables.
+2. Set the email variables using the mailbox's SMTP details.
 3. Deploy, then submit a test inquiry and confirm it arrives.
 4. Run Lighthouse against the live URL and record results in `docs/TESTING.md`.
 

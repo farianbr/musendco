@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-11-01 — Contact form email over SMTP
+
+- **Contact**: delivery moved from Resend to Nodemailer over SMTP, sending through the Namecheap Private Email mailbox. Replaces `RESEND_API_KEY` with `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER` and `SMTP_PASS`.
+
 ## 2026-10-30 — Menu close and cards, project page layout, team photos
 
 - **Menu**: close now matches the reference (panel lifts out of the top while scaling to 0.95, 0.5s). New cards: scattered project collage, tilted whole poster, client screen.
