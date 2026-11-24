@@ -5,10 +5,11 @@
 | Asset | Location | Status |
 | --- | --- | --- |
 | Projects (15, curated) | `public/projects/<slug>/{cover,portrait,NN}.webp`; gallery sizes in `src/content/project-galleries.json` | **Real** (Behance and farian.me). Add new ones by hand; the old fetch scripts were removed |
-| Founder photo | `public/about/showaeb-bhuyan-shuvo.webp` | **Real**, supplied |
+| Founder photo | `public/about/showaeb-bhuyan-shuvo.webp` (2469×2087, full resolution of the supplied file; served as-is, unoptimised) | **Real**, supplied |
 | 3D mark | `public/brand/muse-3d.webp` (offline three.js render, transparent) | Live |
 | Service images (4) | `public/services/<slug>.webp` | **Demo** |
-| Client marks | `src/components/ui/ClientMark.tsx` (geometric glyph + name) | **Demo**, generated |
+| Client logos | `public/clients/<slug>.png`: one-colour masks (black on transparent, 160px tall) drawn in the text colour by `src/components/ui/ClientMark.tsx`. Sources: Sony, UNICEF, Hitachi (2025), Domino's (2025 symbol), MSI wordmark: Wikimedia Commons; MSI dragon: Simple Icons; KENT, Hindware: the brands' own sites; merQetia: its own wordmark file; Kelinto: its wordmark (DM Sans Bold, tight tracking) outlined. White parts of each logo were made transparent. Cellshoppe, NT Blu Ray, 1 ms, Revenant Esports, Ashol Incorporated, SKRP Group, CarClinic, Baby Basket, The BlackBoard and Bonoya have no public logo file, so their names are typeset until files are supplied | **Real** (10 typeset) |
+| Tool logos | `public/tools/*.svg`, full colour, current marks from svgl.app (React recoloured to a mid blue that reads on both themes; Socket.IO drawn in the text colour as a mask) | Live |
 | Wordmark | `src/components/ui/Wordmark.tsx` (supplied logo, inline SVG) | Live |
 | Icon | `src/app/icon.svg` (orange mark on a white circle) | Live |
 | Social card | `src/app/opengraph-image.tsx` (generated, dark) | Live |

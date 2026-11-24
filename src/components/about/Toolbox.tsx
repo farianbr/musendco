@@ -1,58 +1,45 @@
-import {
-  siBlender,
-  siFigma,
-  siNextdotjs,
-  siNodedotjs,
-  siPostgresql,
-  siReact,
-  siSocketdotio,
-  siTailwindcss,
-  siTypescript,
-  siVite,
-} from "simple-icons";
-
-type Tool =
-  | { name: string; icon: { path: string; hex: string }; mono?: boolean }
-  | { name: string; letters: string; fg: string; bg: string };
+import Image from "next/image";
 
 /**
- * The studio's everyday tools. Adobe apps are drawn as their two-letter
- * tiles; everything else uses its Simple Icons mark. Edit this list freely.
+ * A tool's own logo, in full colour (public/tools, from svgl.app, which tracks
+ * each brand's current mark). Every file reads on both themes; a one-colour
+ * mark is set `mono` and painted in the text colour instead, so it follows
+ * the theme without a second file.
  */
+type Tool = { name: string; src: string; mono?: boolean };
+
+/** The studio's everyday tools. Edit this list freely. */
 const TOOLS: Tool[] = [
-  { name: "Adobe Photoshop", letters: "Ps", fg: "#31a8ff", bg: "#001e36" },
-  { name: "Adobe Illustrator", letters: "Ai", fg: "#ff9a00", bg: "#330000" },
-  { name: "Adobe InDesign", letters: "Id", fg: "#ff3366", bg: "#49021f" },
-  { name: "Adobe After Effects", letters: "Ae", fg: "#9999ff", bg: "#00005b" },
-  { name: "Adobe Lightroom", letters: "Lr", fg: "#31a8ff", bg: "#001e36" },
-  { name: "Figma", icon: siFigma },
-  { name: "Blender", icon: siBlender },
-  { name: "React", icon: siReact },
-  { name: "Next.js", icon: siNextdotjs, mono: true },
-  { name: "TypeScript", icon: siTypescript },
-  { name: "Tailwind CSS", icon: siTailwindcss },
-  { name: "Node.js", icon: siNodedotjs },
-  { name: "Vite", icon: siVite },
-  { name: "PostgreSQL", icon: siPostgresql },
-  { name: "Socket.IO", icon: siSocketdotio, mono: true },
+  { name: "Adobe Photoshop", src: "/tools/photoshop.svg" },
+  { name: "Adobe Illustrator", src: "/tools/illustrator.svg" },
+  { name: "Adobe InDesign", src: "/tools/indesign.svg" },
+  { name: "Adobe After Effects", src: "/tools/after-effects.svg" },
+  { name: "Adobe Lightroom", src: "/tools/lightroom.svg" },
+  { name: "Figma", src: "/tools/figma.svg" },
+  { name: "Blender", src: "/tools/blender.svg" },
+  { name: "React", src: "/tools/react.svg" },
+  { name: "Next.js", src: "/tools/nextjs.svg" },
+  { name: "TypeScript", src: "/tools/typescript.svg" },
+  { name: "Tailwind CSS", src: "/tools/tailwindcss.svg" },
+  { name: "Node.js", src: "/tools/nodejs.svg" },
+  { name: "Vite", src: "/tools/vite.svg" },
+  { name: "PostgreSQL", src: "/tools/postgresql.svg" },
+  { name: "Socket.IO", src: "/tools/socketio.svg", mono: true },
 ];
+
+function Logo({ tool }: { tool: Tool }) {
+  if (tool.mono) {
+    const mask = `url(${tool.src}) center / contain no-repeat`;
+    return <span aria-hidden className="block size-7 bg-current md:size-8" style={{ mask, WebkitMask: mask }} />;
+  }
+  return <Image src={tool.src} alt="" width={32} height={32} unoptimized className="size-7 object-contain md:size-8" />;
+}
 
 function Tile({ tool }: { tool: Tool }) {
   return (
     <li className="toolbox-tile group relative">
       <span className="flex size-14 items-center justify-center rounded-2xl border border-line bg-bg transition-[transform,border-color] duration-(--dur) ease-out group-hover:-translate-y-1 group-hover:border-line-strong md:size-16">
-        {"letters" in tool ? (
-          <span
-            className="flex size-9 items-center justify-center rounded-[9px] border-[1.5px] text-[0.9375rem] font-bold tracking-[-0.02em] md:size-10"
-            style={{ color: tool.fg, background: tool.bg, borderColor: tool.fg }}
-          >
-            {tool.letters}
-          </span>
-        ) : (
-          <svg viewBox="0 0 24 24" className="size-7 md:size-8" fill={tool.mono ? "currentColor" : `#${tool.icon.hex}`}>
-            <path d={tool.icon.path} />
-          </svg>
-        )}
+        <Logo tool={tool} />
       </span>
       <span
         role="tooltip"

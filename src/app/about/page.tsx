@@ -146,7 +146,9 @@ export default function AboutPage() {
               src={about.founder.image.src}
               alt={about.founder.image.alt}
               fill
-              sizes="(min-width: 1280px) 600px, 100vw"
+              // The original file, served as-is: full resolution with no
+              // re-compression, and "Open image in new tab" shows it.
+              unoptimized
               className="object-cover"
             />
             <span aria-hidden className="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-black/75 to-transparent" />

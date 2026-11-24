@@ -56,9 +56,12 @@ export type ProcessStage = {
 
 export type Client = {
   name: string;
-  /** Simple geometric glyph rendered next to the wordmark. */
-  glyph: "circle" | "half" | "ring" | "square" | "triangle" | "bars" | "arc" | "diamond";
-  case: "upper" | "lower" | "title";
+  /**
+   * The client's own logo as a one-colour mask (black on transparent, in
+   * public/clients) so it can take the text colour. Without one, the name is
+   * typeset instead. `scale` nudges the optical size of a single logo.
+   */
+  logo?: { src: string; width: number; height: number; scale?: number };
 };
 
 export type Testimonial = {

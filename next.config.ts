@@ -19,6 +19,8 @@ const nextConfig: NextConfig = {
   },
   images: {
     formats: ["image/avif", "image/webp"],
+    // Optimised images open in a browser tab instead of downloading.
+    contentDispositionType: "inline",
   },
   // /work became /services (projects are now presented by service).
   async redirects() {

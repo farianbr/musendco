@@ -1,29 +1,31 @@
 import type { Client, Faq, Testimonial } from "@/types/content";
 
 /**
- * Clients. Marks are generated until real logos are supplied. Confirm
- * permission to show each name before launch.
+ * Clients. Logos come from each brand's own site or Wikimedia Commons (see
+ * docs/ASSETS.md) and are stored as one-colour masks in public/clients. Names
+ * without a logo are typeset until a file is supplied. Confirm permission to
+ * show each name before launch.
  */
 export const clients: Client[] = [
-  { name: "Sony", glyph: "square", case: "upper" },
-  { name: "KENT", glyph: "ring", case: "upper" },
-  { name: "UNICEF", glyph: "circle", case: "upper" },
-  { name: "Domino's", glyph: "diamond", case: "title" },
-  { name: "Kelinto", glyph: "half", case: "title" },
-  { name: "merQetia", glyph: "bars", case: "title" },
-  { name: "Cellshoppe", glyph: "arc", case: "title" },
-  { name: "Hindware", glyph: "triangle", case: "title" },
-  { name: "Hitachi", glyph: "square", case: "upper" },
-  { name: "NT Blu Ray", glyph: "ring", case: "title" },
-  { name: "1 ms", glyph: "bars", case: "lower" },
-  { name: "Revenant eSports", glyph: "triangle", case: "title" },
-  { name: "MSI", glyph: "diamond", case: "upper" },
-  { name: "Ashol Incorporated", glyph: "half", case: "title" },
-  { name: "SKRP Group", glyph: "diamond", case: "upper" },
-  { name: "CarClinic", glyph: "arc", case: "title" },
-  { name: "Baby Basket", glyph: "circle", case: "title" },
-  { name: "The BlackBoard", glyph: "square", case: "title" },
-  { name: "Bonoya", glyph: "half", case: "title" },
+  { name: "Sony", logo: { src: "/clients/sony.png", width: 909, height: 160 } },
+  { name: "KENT", logo: { src: "/clients/kent.png", width: 301, height: 160 } },
+  { name: "UNICEF", logo: { src: "/clients/unicef.png", width: 667, height: 160 } },
+  { name: "Domino's", logo: { src: "/clients/dominos.png", width: 160, height: 160 } },
+  { name: "Kelinto", logo: { src: "/clients/kelinto.png", width: 643, height: 160, scale: 0.85 } },
+  { name: "merQetia", logo: { src: "/clients/merqetia.png", width: 695, height: 160 } },
+  { name: "Cellshoppe" },
+  { name: "Hindware", logo: { src: "/clients/hindware.png", width: 721, height: 160 } },
+  { name: "Hitachi", logo: { src: "/clients/hitachi.png", width: 1033, height: 160, scale: 0.92 } },
+  { name: "NT Blu Ray" },
+  { name: "1 ms" },
+  { name: "Revenant Esports" },
+  { name: "MSI", logo: { src: "/clients/msi.png", width: 485, height: 160, scale: 1.1 } },
+  { name: "Ashol Incorporated" },
+  { name: "SKRP Group" },
+  { name: "CarClinic" },
+  { name: "Baby Basket" },
+  { name: "The BlackBoard" },
+  { name: "Bonoya" },
 ];
 
 /** DEMO testimonials. Fictional people; replace with approved quotes. */

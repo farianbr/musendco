@@ -105,7 +105,7 @@ export function Stats() {
 
         <Card className="md:col-span-5">
           <Figure plain={String(clients.length).padStart(2, "0")} />
-          <Label plain="Named" accent="clients" />
+          <Label plain="Brand" accent="partners" />
           <p className="mt-2 max-w-[44ch] text-[0.9375rem] text-fg-2">
             From global electronics and esports to retail and growth agencies, wherever they are.
           </p>
@@ -114,7 +114,7 @@ export function Stats() {
               {[0, 1].map((copy) => (
                 <div key={copy} className="flex shrink-0 items-center gap-12 pr-12 text-fg-2">
                   {clients.map((client) => (
-                    <ClientMark key={client.name} client={client} />
+                    <ClientMark key={client.name} client={client} size="small" />
                   ))}
                 </div>
               ))}

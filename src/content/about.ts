@@ -18,15 +18,15 @@ export const about = {
   },
   founder: {
     name: "Showaeb Bhuyan Shuvo",
-    role: "Founder & Creative Lead",
+    role: "Founder & Creative Head",
     image: {
       src: "/about/showaeb-bhuyan-shuvo.webp",
       alt: "Portrait of Showaeb Bhuyan Shuvo in sunglasses and a dark jacket against an orange and violet gradient",
-      width: 1600,
-      height: 1352,
+      width: 2469,
+      height: 2087,
     },
     body: [
-      "Showaeb Bhuyan Shuvo is the founder and creative lead of Muse & Co. A United Kingdom-based Creative Agency built around clear ideas, distinctive visual systems, and work with purpose.",
+      "Showaeb Bhuyan Shuvo is the founder and creative head of Muse & Co. A United Kingdom-based Creative Agency built around clear ideas, distinctive visual systems, and work with purpose.",
       "His practice spans brand identity, campaigns, packaging, illustration, and digital design. Shuvo approaches each project as a process of translation: taking a business ambition, a product, or a story and giving it a visual form people can recognise and remember. The work is thoughtful, expressive, and grounded in the belief that good design should do more than look polished: it should make the right thing clear.",
       "At Muse, Shuvo works closely with clients from the first conversation through to the final detail. The studio partners with people and businesses looking to build brands with substance, creating identities and communications that feel relevant now and stay useful as they grow. Every decision is considered, every element has a role, and the aim is always the same: work that feels original, useful, and made to last.",
     ],

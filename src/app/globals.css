@@ -478,20 +478,6 @@
   }
 }
 
-/* The site menu keeps one light palette whichever theme the page is in. */
-.menu-surface {
-  color-scheme: light;
-  --bg: #f6f6f2;
-  --surface: #eaeae5;
-  --raised: #e0e0da;
-  --fg: #121214;
-  --fg-2: #3b3b3f;
-  --muted: #5e5e62;
-  --line: rgb(18 18 20 / 0.12);
-  --line-strong: rgb(18 18 20 / 0.26);
-  --accent-ink: #c2330f;
-}
-
 /* ---------------------------------------------------------------------------
    View transitions (React <ViewTransition> + browser API)
    --------------------------------------------------------------------------- */
@@ -789,44 +775,25 @@ a:hover > .footer-link {
 }
 
 /* ---------------------------------------------------------------------------
-   Testimonial cards: lift on hover with a warm edge; the feature card carries
-   a slow moving highlight so the orange never reads as a flat block.
+   Wall of fame: every quote is a plaque on one surface, hung slightly off
+   true (--tilt, set per card). Hover straightens it and lifts it with a warm
+   edge. Nothing lifts while the wall is being dragged.
    --------------------------------------------------------------------------- */
 .quote-card {
+  rotate: var(--tilt, 0deg);
+  box-shadow: 0 18px 40px -28px rgb(0 0 0 / 0.6);
   transition:
+    rotate 600ms var(--ease-out),
     transform 600ms var(--ease-out),
     box-shadow 600ms var(--ease-out),
     border-color var(--dur) var(--ease-out);
 }
 @media (hover: hover) and (pointer: fine) {
-  .quote-card:hover {
+  .quote-card:hover:not([data-dragging] *) {
+    rotate: 0deg;
     transform: translateY(-6px);
-    box-shadow: 0 24px 60px -24px rgb(255 89 49 / 0.45);
-  }
-  .quote-card:not(.bg-accent):hover {
     border-color: rgb(255 89 49 / 0.45);
-  }
-}
-.quote-avatar {
-  background: linear-gradient(135deg, var(--brand-orange), var(--brand-purple) 60%, var(--brand-violet));
-}
-.quote-card__shine {
-  position: absolute;
-  inset: -40%;
-  background: radial-gradient(40% 40% at 50% 50%, rgb(255 255 255 / 0.35), transparent 70%);
-  pointer-events: none;
-}
-@media (prefers-reduced-motion: no-preference) {
-  .quote-card__shine {
-    animation: quote-shine 9s var(--ease-in-out) infinite alternate;
-  }
-}
-@keyframes quote-shine {
-  from {
-    transform: translate(-25%, -20%);
-  }
-  to {
-    transform: translate(25%, 20%);
+    box-shadow: 0 24px 60px -24px rgb(255 89 49 / 0.45);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -836,34 +803,31 @@ a:hover > .footer-link {
 }
 
 /* ---------------------------------------------------------------------------
-   Testimonial wall: columns drift in alternating directions (linear, it is
-   constant motion), fade at the edges, and pause on hover so cards can be read.
+   Testimonial wall: columns drift in alternating directions and fade at the
+   edges. TestimonialWall drives the drift in JS so a mouse can grab the wall
+   and throw it; hovering slows it to a stop so any card can be read.
    --------------------------------------------------------------------------- */
 .testimonial-wall {
   height: clamp(36rem, 70vh, 46rem);
   overflow: hidden;
   mask-image: linear-gradient(180deg, transparent, black 14%, black 86%, transparent);
+  cursor: grab;
+  /* The wall itself: a faint dot grid the plaques hang on. */
+  background-image: radial-gradient(circle at 1px 1px, var(--line-strong) 1px, transparent 0);
+  background-size: 24px 24px;
 }
-@media (prefers-reduced-motion: no-preference) {
-  .testimonial-track {
-    animation: wall-drift var(--wall-duration, 50s) linear infinite;
-  }
-  .testimonial-col[data-reverse] .testimonial-track {
-    animation-direction: reverse;
-  }
-  .testimonial-wall:hover .testimonial-track {
-    animation-play-state: paused;
-  }
+.testimonial-wall[data-dragging] {
+  cursor: grabbing;
+  user-select: none;
 }
-@keyframes wall-drift {
-  to {
-    transform: translateY(-50%);
-  }
+.testimonial-track {
+  will-change: transform;
 }
 @media (prefers-reduced-motion: reduce) {
   .testimonial-wall {
     height: auto;
     mask-image: none;
+    cursor: auto;
   }
   .testimonial-copy[aria-hidden="true"] {
     display: none;
@@ -880,3 +844,24 @@ a:hover > .footer-link {
   cursor: grabbing;
 }
 
+
+/* The hero's primary call to action. The hero field burns orange, so the
+   button is drawn in the text colour (white on dark, black on light) and
+   lifted on a soft shadow; the orange lives only in its arrow chip. */
+.cta-primary {
+  box-shadow: 0 10px 30px -10px rgb(0 0 0 / 0.55);
+  transition:
+    box-shadow 370ms ease-out,
+    transform 200ms ease-out;
+}
+:root[data-theme="light"] .cta-primary {
+  box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.35);
+}
+@media (hover: hover) and (pointer: fine) {
+  .cta-primary:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--fg) 16%, transparent),
+      0 16px 40px -10px rgb(0 0 0 / 0.6);
+  }
+}

@@ -1,5 +1,23 @@
 # Changelog
 
+## 2026-11-25 — Wall of fame, founder photo, hero contrast
+
+- **Toolbox**: no more doubled logos. React is one file in a mid blue that reads on both themes; Socket.IO is drawn in the text colour. The per-theme logo pairs and their CSS are gone.
+- **Testimonials**: now a wall of fame. No avatars; each quote is a plaque (company, quote, name and role) hung slightly off true on a dotted wall, with every third plaque on a diagonal set in larger type. Hover straightens a plaque. Drag, throw and drift are unchanged. Eyebrow reads "Wall of fame".
+- **Founder photo**: the original file in public/about is served as-is (`unoptimized`): full resolution, no re-compression, and "Open image in new tab" opens it instead of downloading. Optimised images are also served inline now (`images.contentDispositionType: "inline"`); `images.qualities` is back to the default.
+- **Hero**: "Start a project" is drawn in the text colour (white on dark, black on light) with an orange arrow chip, so it stands off the orange field.
+- **Clients**: Revenant Esports logo removed (wrong mark); the name is typeset until a file is supplied.
+
+## 2026-11-25 — Logos, hero CTA, menu theme, testimonials
+
+- **Founder photo**: re-exported at the supplied file's full resolution (2469px) and served at quality 90 (`images.qualities: [75, 90]`).
+- **Menu**: the panel follows the site theme (it was locked to the light palette); the Close pill inverts with it.
+- **Hero**: "Start a project" is the primary action (orange, glow, arrow chip); "View projects" is a quiet outline. Neither follows the cursor any more.
+- **Founder role**: Founder & Creative Head.
+- **Testimonials**: every card shares one surface. The wall is driven by `TestimonialWall`: drag it with a mouse or pen and throw it; hover slows it to a stop; touch still scrolls the page.
+- **Clients**: real logos for Sony, KENT, UNICEF, Domino's, Kelinto, merQetia, Hindware, Hitachi, Revenant Esports and MSI, as one-colour masks; the rest are typeset names (see ASSETS.md). The generated glyphs are gone. Stats card label is now "Brand partners".
+- **Toolbox**: full-colour current logos (new Vite mark, current Adobe tiles, Figma, Blender, etc.) instead of single-colour icons. `simple-icons` removed.
+
 ## 2026-11-24 — Titles, toolbox tooltips, footer, our story
 
 - **Titles**: "Muse & Co." on Home, "Page - Muse & Co." elsewhere (case studies use the project name). Open Graph site name is Muse & Co.

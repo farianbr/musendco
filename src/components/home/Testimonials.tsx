@@ -3,37 +3,34 @@ import { home } from "@/content/home";
 import type { Testimonial } from "@/types/content";
 import { SplitWords } from "@/components/ui/SplitWords";
 import { cn } from "@/lib/cn";
+import { TestimonialWall } from "./TestimonialWall";
 
-type Tone = "orange" | "violet" | "plain";
+/** How far each plaque hangs off true, cycled through the wall. */
+const TILTS = [-1.1, 0.7, -0.4, 1, -0.8, 0.45];
 
-function initials(name: string) {
-  return name
-    .replace(/^Dr\.?\s+/, "")
-    .split(/\s+/)
-    .map((part) => part[0])
-    .slice(0, 2)
-    .join("");
-}
+type Placed = { item: Testimonial; index: number; featured: boolean };
 
-/** Two cards carry brand colour; everything else sits on the surface. */
-function toneFor(index: number): Tone {
-  if (index === 0) return "orange";
-  if (index === 4) return "violet";
-  return "plain";
-}
-
+/**
+ * Deals the quotes into columns. Every third plaque on a diagonal is
+ * featured (larger type), so each column gets its share of big ones.
+ */
 function columns(items: Testimonial[], count: number) {
-  const cols: { item: Testimonial; index: number }[][] = Array.from({ length: count }, () => []);
-  items.forEach((item, index) => cols[index % count].push({ item, index }));
+  const cols: Placed[][] = Array.from({ length: count }, () => []);
+  items.forEach((item, index) => {
+    const col = index % count;
+    const row = Math.floor(index / count);
+    cols[col].push({ item, index, featured: (row + col) % 3 === 0 });
+  });
   return cols;
 }
 
 /**
- * Testimonials as a living wall: columns of quote cards drift slowly up and
- * down in alternating directions, fading out at the top and bottom edges,
- * and pause while hovered so any card can be read. Phones get a swipeable
- * row instead. Under reduced motion the columns simply stand still.
- * Shared by Home and About.
+ * Testimonials as a wall of fame: plaques of praise hung slightly off true on
+ * a dotted wall, drifting slowly up and down in alternating columns and
+ * fading out at the top and bottom edges. Hover straightens a plaque and
+ * slows the wall to a stop; a mouse can grab and throw it (TestimonialWall).
+ * Phones get a swipeable row instead. Under reduced motion the columns stand
+ * still. Shared by Home and About.
  */
 export function Testimonials({ items }: { items: Testimonial[] }) {
   const { eyebrow, lead, emphasis, intro } = home.testimonials;
@@ -55,32 +52,31 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
       </div>
 
       {/* Phones: one swipeable row. */}
-      <ul className="mt-(--space-block) flex snap-x snap-mandatory scroll-px-(--gutter) gap-3 overflow-x-auto px-(--gutter) pb-2 [scrollbar-width:none] md:hidden">
+      <ul className="mt-(--space-block) flex snap-x snap-mandatory scroll-px-(--gutter) gap-3 overflow-x-auto px-(--gutter) py-3 [scrollbar-width:none] md:hidden">
         {items.map((item, index) => (
           <li key={item.id} className="w-[84vw] max-w-[22rem] shrink-0 snap-start">
-            <Card item={item} tone={toneFor(index)} />
+            <Card item={item} index={index} featured={index % 3 === 0} />
           </li>
         ))}
       </ul>
 
       {/* Tablet (two columns) and desktop (three). */}
       {[2, 3].map((count) => (
-        <div
+        <TestimonialWall
           key={count}
-          data-reveal="fade"
           className={cn(
-            "testimonial-wall shell mt-(--space-block) hidden gap-4",
+            "testimonial-wall shell mt-(--space-block) hidden gap-5",
             count === 2 ? "md:grid md:grid-cols-2 lg:hidden" : "lg:grid lg:grid-cols-3",
           )}
         >
           {columns(items, count).map((column, c) => (
-            <div key={c} className="testimonial-col" data-reverse={c % 2 === 1 || undefined}>
-              <div className="testimonial-track" style={{ "--wall-duration": `${46 + c * 8}s` } as React.CSSProperties}>
+            <div key={c} className="testimonial-col">
+              <div data-wall-track data-reverse={c % 2 === 1 || undefined} data-duration={46 + c * 8} className="testimonial-track">
                 {[0, 1].map((copy) => (
-                  <ul key={copy} aria-hidden={copy === 1 || undefined} className="testimonial-copy flex flex-col gap-4 pb-4">
-                    {column.map(({ item, index }) => (
+                  <ul key={copy} aria-hidden={copy === 1 || undefined} className="testimonial-copy flex flex-col gap-5 px-1.5 pb-5">
+                    {column.map(({ item, index, featured }) => (
                       <li key={item.id}>
-                        <Card item={item} tone={toneFor(index)} />
+                        <Card item={item} index={index} featured={featured} />
                       </li>
                     ))}
                   </ul>
@@ -88,60 +84,35 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
               </div>
             </div>
           ))}
-        </div>
+        </TestimonialWall>
       ))}
     </section>
   );
 }
 
-function Card({ item, tone }: { item: Testimonial; tone: Tone }) {
-  const coloured = tone !== "plain";
-
+function Card({ item, index, featured }: { item: Testimonial; index: number; featured: boolean }) {
   return (
     <figure
-      className={cn(
-        "quote-card relative flex flex-col overflow-hidden rounded-card p-6 md:p-7",
-        tone === "orange" && "bg-accent text-on-accent",
-        tone === "violet" && "bg-brand-violet text-white",
-        tone === "plain" && "border border-line bg-surface",
-      )}
+      className="quote-card flex flex-col rounded-card border border-line bg-surface p-6 md:p-7"
+      style={{ "--tilt": `${TILTS[index % TILTS.length]}deg` } as React.CSSProperties}
     >
-      {coloured && <span aria-hidden className="quote-card__shine" />}
-      <Quote
-        aria-hidden
-        strokeWidth={1.5}
-        className={cn("relative size-7 -scale-x-100", coloured ? "opacity-60" : "text-accent-ink")}
-      />
+      <div className="flex items-center justify-between gap-4">
+        <span className="font-mono text-mono text-accent-ink uppercase">{item.company}</span>
+        <Quote aria-hidden strokeWidth={1.5} className="size-6 shrink-0 -scale-x-100 text-accent-ink" />
+      </div>
       <blockquote
         className={cn(
-          "relative mt-4 font-medium tracking-[-0.02em]",
-          coloured ? "text-[1.3125rem] leading-[1.3]" : "text-[1.0625rem] leading-[1.45]",
+          "mt-5 font-medium",
+          featured ? "text-[1.375rem] leading-[1.28] tracking-[-0.03em]" : "text-[1.0625rem] leading-[1.45] tracking-[-0.02em]",
         )}
       >
         <p>{item.quote}</p>
       </blockquote>
-      <figcaption
-        className={cn(
-          "relative mt-7 flex items-center gap-3 border-t pt-5",
-          tone === "orange" ? "border-black/15" : tone === "violet" ? "border-white/20" : "border-line",
-        )}
-      >
-        <span
-          aria-hidden
-          className={cn(
-            "inline-flex size-10 shrink-0 items-center justify-center rounded-full text-meta font-semibold",
-            tone === "orange" && "bg-on-accent text-accent",
-            tone === "violet" && "bg-white text-brand-violet",
-            tone === "plain" && "quote-avatar text-white",
-          )}
-        >
-          {initials(item.name)}
-        </span>
+      <figcaption className="mt-7 flex items-center gap-3">
+        <span aria-hidden className="h-px w-6 shrink-0 bg-accent" />
         <span className="min-w-0">
           <span className="block text-[0.9375rem] font-medium">{item.name}</span>
-          <span className={cn("block font-mono text-mono uppercase", coloured ? "opacity-70" : "text-muted")}>
-            {item.role}, {item.company}
-          </span>
+          <span className="block text-meta text-muted">{item.role}</span>
         </span>
       </figcaption>
     </figure>

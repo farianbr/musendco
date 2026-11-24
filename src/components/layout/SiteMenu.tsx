@@ -128,7 +128,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
-            className="menu-surface fixed inset-2 text-fg"
+            className="fixed inset-2 text-fg"
             exit={reduce ? { opacity: 0, transition: { duration: 0.15 } } : { y: "-100%", scale: 0.95, transition: { duration: 0.5, ease: EASE_POWER3 } }}
           >
             {/* The white sheet moves on its own; the content does not ride on it. */}
@@ -160,7 +160,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                     <Link
                       href="/services"
                       onClick={close}
-                      className="group relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[24px] bg-[#0c0c0e] p-5 text-center text-white"
+                      className="group relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[24px] bg-[#0c0c0e] p-5 text-center text-white ring-1 ring-line"
                     >
                       {COLLAGE.map((tile) => {
                         const cover = getProject(tile.slug)?.cover;
@@ -294,7 +294,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
         onClick={() => onOpenChange(!open)}
         className={cn(
           "menu-pill pressable group/menu relative z-10 inline-flex h-11 items-center gap-3 rounded-full pr-6 pl-5 text-[0.9375rem] font-semibold tracking-[-0.01em] transition-[background-color,color,box-shadow,transform] duration-[370ms] ease-out lg:h-12",
-          open ? "bg-[#121214] text-white" : "bg-accent text-on-accent hover:-translate-y-px",
+          open ? "bg-fg text-bg" : "bg-accent text-on-accent hover:-translate-y-px",
         )}
       >
         <MenuDots open={open} />

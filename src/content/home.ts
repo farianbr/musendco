@@ -36,7 +36,7 @@ export const home = {
     emphasis: "working with the world",
   },
   testimonials: {
-    eyebrow: "Testimonials",
+    eyebrow: "Wall of fame",
     lead: "Kind words from the people",
     emphasis: "we make things with",
     intro: "Founders, marketers and makers on what it is like to work with Muse, and what changed after.",

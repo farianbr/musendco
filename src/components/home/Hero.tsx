@@ -4,10 +4,9 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { home } from "@/content/home";
 import { projects } from "@/content/projects";
 import { SplitWords } from "@/components/ui/SplitWords";
-import { Magnetic } from "@/components/motion/Magnetic";
 
 const smallButton =
-  "pressable group/btn inline-flex min-h-11 items-center gap-2 rounded-full px-5 text-meta font-semibold tracking-[0.04em] uppercase";
+  "pressable group/btn inline-flex items-center gap-2 rounded-full text-meta font-semibold tracking-[0.04em] uppercase";
 
 /**
  * Full-viewport hero (after wearestokt.com): a warm field that burns from the
@@ -69,15 +68,18 @@ export function Hero() {
             className="enter-fade mt-8 flex flex-wrap items-center gap-2.5"
             style={{ "--delay": "580ms" } as React.CSSProperties}
           >
-            <Magnetic>
-              <Link href="/services" className={`${smallButton} bg-fg text-bg hover:opacity-90`}>
-                View projects
-                <ArrowRight aria-hidden strokeWidth={2.25} className="size-3.5 transition-transform duration-(--dur) ease-out group-hover/btn:translate-x-0.5" />
-              </Link>
-            </Magnetic>
-            <Link href="/contact" className={`${smallButton} bg-accent text-on-accent hover:brightness-110`}>
+            {/* Start a project is the one call to action. The field behind it is
+                orange, so the button takes the text colour (white on dark, black
+                on light) with an orange arrow chip. View projects sits beside it
+                as a quiet outline. Neither follows the cursor. */}
+            <Link href="/contact" className={`${smallButton} cta-primary min-h-12 bg-fg pr-2 pl-6 text-bg`}>
               Start a project
-              <ArrowRight aria-hidden strokeWidth={2.25} className="size-3.5 transition-transform duration-(--dur) ease-out group-hover/btn:translate-x-0.5" />
+              <span aria-hidden className="ml-1 inline-flex size-8 items-center justify-center rounded-full bg-accent text-on-accent">
+                <ArrowRight strokeWidth={2.25} className="size-3.5 transition-transform duration-(--dur) ease-out group-hover/btn:translate-x-0.5" />
+              </span>
+            </Link>
+            <Link href="/services" className={`${smallButton} min-h-12 border border-line-strong px-6 text-fg hover:border-fg hover:bg-fg/5`}>
+              View projects
             </Link>
           </div>
         </div>
