@@ -1,9 +1,28 @@
 import type { Metadata, Viewport } from "next";
+import localFont from "next/font/local";
 import { site } from "@/content/site";
 import { absoluteUrl, siteUrl } from "@/lib/site-url";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
+
+/**
+ * TeX Gyre Heros (GUST Font License, see fonts/GUST-FONT-LICENSE.txt): a free
+ * Helvetica clone, bundled so devices without Helvetica Neue still get the
+ * brand look. It sits behind the real Helvetica Neue in --font-sans, and is
+ * not preloaded, so Apple devices (which have Helvetica Neue) never fetch it.
+ * Only 400 and 700 exist: 500 renders as 400 and 600 as 700, as Arial did.
+ */
+const heros = localFont({
+  src: [
+    { path: "./fonts/texgyreheros-regular.otf", weight: "400", style: "normal" },
+    { path: "./fonts/texgyreheros-italic.otf", weight: "400", style: "italic" },
+    { path: "./fonts/texgyreheros-bold.otf", weight: "700", style: "normal" },
+  ],
+  variable: "--font-heros",
+  display: "swap",
+  preload: false,
+});
 
 export const metadata: Metadata = {
   metadataBase: siteUrl,
@@ -40,6 +59,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      className={heros.variable}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

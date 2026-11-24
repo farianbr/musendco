@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useId, useRef } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { ChevronRight } from "lucide-react";
 import { getProject, projects } from "@/content/projects";
@@ -51,6 +51,15 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
   const panelId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
   const reduce = useReducedMotion();
+  const router = useRouter();
+  const prefetched = useRef(false);
+
+  // The link whose page is loading. The menu stays up, showing it pending,
+  // until the new route commits (Header closes the menu on pathname change).
+  // Closing at tap time left the old page on screen with no feedback while a
+  // slow phone fetched and rendered the next one, which read as a frozen menu.
+  const [pending, setPending] = useState<string | null>(null);
+  if (!open && pending) setPending(null);
 
   useEffect(() => {
     if (!open) return;
@@ -93,6 +102,21 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
 
   const close = () => onOpenChange(false);
 
+  /** Click handler for menu links. Same-page targets close at once; others wait for the route. */
+  const go = (href: string) => (event: React.MouseEvent) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
+    const target = href.split("#")[0] || "/";
+    if (target === pathname) close();
+    else setPending(href);
+  };
+
+  /** Warm the menu's routes as soon as the pill is touched or hovered, before the links even mount. */
+  const prefetch = () => {
+    if (prefetched.current) return;
+    prefetched.current = true;
+    for (const href of ["/", ...navigation.map((item) => item.href)]) router.prefetch(href);
+  };
+
   const card = (index: number) => {
     if (reduce) return {};
     const delay = 0.05 + index * 0.2;
@@ -128,6 +152,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
             role="dialog"
             aria-modal="true"
             aria-label="Site menu"
+            aria-busy={pending ? true : undefined}
             className="fixed inset-2 text-fg"
             exit={reduce ? { opacity: 0, transition: { duration: 0.15 } } : { y: "-100%", scale: 0.95, transition: { duration: 0.5, ease: EASE_POWER3 } }}
           >
@@ -159,7 +184,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                   <m.div {...card(0)} className="col-span-2 min-h-0">
                     <Link
                       href="/services"
-                      onClick={close}
+                      onClick={go("/services")}
                       className="group relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[24px] bg-[#0c0c0e] p-5 text-center text-white ring-1 ring-line"
                     >
                       {COLLAGE.map((tile) => {
@@ -193,11 +218,11 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                     <m.div {...card(1)} className="min-h-0">
                       <Link
                         href={`/services/${posterProject.slug}`}
-                        onClick={close}
+                        onClick={go(`/services/${posterProject.slug}`)}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#e4e3dc] p-4 text-[#0c0c0e]"
                       >
-                        <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-black/15 px-3.5 text-meta">
-                          Poster series
+                        <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-black/15 px-3.5 py-1 text-meta leading-tight">
+                          {posterProject.discipline}
                         </span>
                         {/* The whole poster, tilted and running off the bottom edge. */}
                         <span className="absolute top-[22%] left-1/2 aspect-[7/10] w-[68%] -translate-x-1/2 rotate-[5deg] overflow-hidden rounded-md shadow-2xl transition-transform duration-[900ms] ease-out group-hover:-translate-y-1.5 group-hover:rotate-[3deg] motion-reduce:transition-none">
@@ -211,16 +236,18 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                     <m.div {...card(2)} className="min-h-0">
                       <Link
                         href={`/services/${clientProject.slug}`}
-                        onClick={close}
+                        onClick={go(`/services/${clientProject.slug}`)}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#4900ea] p-4 text-white"
                       >
-                        <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-white/30 px-3.5 text-meta">
-                          Client case
+                        <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-white/30 px-3.5 py-1 text-meta leading-tight">
+                          {clientProject.discipline}
                         </span>
                         <span className="relative z-10 mt-3 block text-subheading font-medium">{clientProject.title}</span>
                         <span className="relative z-10 block text-meta text-white/70">Order platform</span>
-                        {/* The screen bleeds off the corner so its small text never has to be read. */}
-                        <span className="absolute top-[42%] left-4 aspect-[8/5] w-[175%] overflow-hidden rounded-lg shadow-2xl transition-transform duration-[900ms] ease-out group-hover:-translate-y-1.5 motion-reduce:transition-none">
+                        {/* The screen bleeds off the corner so its small text never has to be read.
+                            In flow (not pinned to a top %) so it always clears the text, even when the
+                            service pill wraps on a narrow phone. */}
+                        <span className="relative mt-4 block aspect-[8/5] w-[175%] overflow-hidden rounded-lg shadow-2xl transition-transform duration-[900ms] ease-out group-hover:-translate-y-1.5 motion-reduce:transition-none">
                           <Image src={clientProject.cover.src} alt="" fill sizes="(min-width: 1024px) 30vw, 80vw" className="object-cover object-left-top" />
                         </span>
                       </Link>
@@ -240,12 +267,13 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                           <m.div {...settle(0.25 + i * 0.09, { y: 47, scale: 1.05 })} className="origin-left">
                             <Link
                               href={item.href}
-                              onClick={close}
+                              onClick={go(item.href)}
                               data-menu-first={i === 0 ? "" : undefined}
                               aria-current={pathname === item.href ? "page" : undefined}
-                              className="block py-0.5 text-[clamp(1.5rem,1.3rem+0.8vw,1.875rem)] leading-[1.22] font-medium tracking-[-0.02em] transition-opacity duration-(--dur-fast) group-hover/list:opacity-40 hover:opacity-100! focus-visible:opacity-100! aria-[current=page]:text-accent-ink"
+                              className="flex items-center gap-3 py-0.5 text-[clamp(1.5rem,1.3rem+0.8vw,1.875rem)] leading-[1.22] font-medium tracking-[-0.02em] transition-opacity duration-(--dur-fast) group-hover/list:opacity-40 hover:opacity-100! focus-visible:opacity-100! aria-[current=page]:text-accent-ink"
                             >
                               {item.label}
+                              {pending === item.href && <PendingDot />}
                             </Link>
                           </m.div>
                         </li>
@@ -267,10 +295,11 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                       <m.li key={service} {...settle(0.27 + i * 0.088, { x: 15, scale: 1.05, opacity: 0 })} className="origin-left">
                         <Link
                           href={`/services#${disciplineSlug(service)}`}
-                          onClick={close}
-                          className="link-underline inline-flex min-h-7 items-center text-[0.9375rem]"
+                          onClick={go(`/services#${disciplineSlug(service)}`)}
+                          className="link-underline inline-flex min-h-7 items-center gap-2 text-[0.9375rem]"
                         >
                           {service}
+                          {pending === `/services#${disciplineSlug(service)}` && <PendingDot />}
                         </Link>
                       </m.li>
                     ))}
@@ -292,6 +321,9 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
         aria-controls={panelId}
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => onOpenChange(!open)}
+        onPointerDown={prefetch}
+        onPointerEnter={prefetch}
+        onFocus={prefetch}
         className={cn(
           "menu-pill pressable group/menu relative z-10 inline-flex h-11 items-center gap-3 rounded-full pr-6 pl-5 text-[0.9375rem] font-semibold tracking-[-0.01em] transition-[background-color,color,box-shadow,transform] duration-[370ms] ease-out lg:h-12",
           open ? "bg-fg text-bg" : "bg-accent text-on-accent hover:-translate-y-px",
@@ -349,6 +381,16 @@ function AddressBlock({
         ))}
       </m.ul>
     </div>
+  );
+}
+
+/** Shown beside a menu link while its page loads. */
+function PendingDot() {
+  return (
+    <span aria-hidden className="relative inline-flex size-2 shrink-0">
+      <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-75 motion-reduce:animate-none" />
+      <span className="relative inline-flex size-2 rounded-full bg-accent" />
+    </span>
   );
 }
 

@@ -13,7 +13,7 @@
 | Wordmark | `src/components/ui/Wordmark.tsx` (supplied logo, inline SVG) | Live |
 | Icon | `src/app/icon.svg` (orange mark on a white circle) | Live |
 | Social card | `src/app/opengraph-image.tsx` (generated, dark) | Live |
-| Fonts | Helvetica Neue via the system font stack (`--font-sans` in globals.css). Licensed, so not bundled: Apple devices render it, others fall back to Helvetica/Arial. To ship it everywhere, add licensed woff2 files in `src/app/fonts/` and load them with `next/font/local`. | Needs licence for webfont |
+| Fonts | Helvetica Neue via the system font stack (`--font-sans` in globals.css). Licensed, so not bundled: Apple devices render it. Everywhere else the bundled TeX Gyre Heros (free Helvetica clone, GUST Font License, files and licence in `src/app/fonts/`, from CTAN) stands in via `next/font/local` in `layout.tsx`. Heros has only 400/700, so 500 renders as 400 and 600 as 700. To ship real Helvetica Neue everywhere, buy a webfont licence and swap the files. | Heros bundled; Helvetica Neue webfont needs licence |
 | Logo | `public/brand/muse-logo-dark.svg` (dark letters, light backgrounds), `muse-logo-light.svg` (white letters), `muse-icon.svg` | Supplied |
 
 ## Demo photography

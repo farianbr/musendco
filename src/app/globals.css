@@ -85,9 +85,10 @@
   --color-danger: var(--danger);
 
   /* Helvetica Neue is the brand face. It is licensed, so it is not bundled:
-     Apple devices have it; elsewhere Helvetica, then Arial, stand in. To ship
-     it everywhere, add licensed woff2 files via next/font/local (docs/ASSETS.md). */
-  --font-sans: "Helvetica Neue", HelveticaNeue, "Helvetica Neue LT Std", Helvetica, Arial, sans-serif;
+     Apple devices render it from the system. Everywhere else the bundled
+     TeX Gyre Heros (--font-heros, a free Helvetica clone loaded in layout.tsx)
+     stands in. See docs/ASSETS.md. */
+  --font-sans: "Helvetica Neue", HelveticaNeue, "Helvetica Neue LT Std", var(--font-heros), Helvetica, Arial, sans-serif;
   --font-mono: var(--font-sans);
 
   --text-display: clamp(2.375rem, 1.6rem + 3.2vw, 4.5rem);

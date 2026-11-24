@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   LazyMotion,
   domAnimation,
@@ -26,6 +27,16 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Any route change closes the menu: a menu link landing, but also the back
+  // button or an edge swipe while the menu is open, which would otherwise
+  // leave it covering the new page with scrolling locked.
+  const pathname = usePathname();
+  const [menuPath, setMenuPath] = useState(pathname);
+  if (menuPath !== pathname) {
+    setMenuPath(pathname);
+    setMenuOpen(false);
+  }
 
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => {

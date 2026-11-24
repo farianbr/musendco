@@ -152,6 +152,9 @@ export function Globe({ location, className }: { location: [number, number]; cla
     const draw = (now: number) => {
       const s = size * dpr;
       const r = s / 2 - 2 * dpr;
+      // Before layout (or while a view transition hides the page) the canvas
+      // can measure 0 wide, which would hand arc() a negative radius and throw.
+      if (r <= 0) return;
       const cx = s / 2;
       const cy = s / 2;
       const ca = Math.cos(rotation.yaw * DEG);
