@@ -132,6 +132,17 @@
     background: var(--bg);
   }
 
+  /* Nothing may widen the page sideways. Reveals start offscreen
+     (slide-r sits ~60px past the right edge until it plays), and on mobile
+     that overflow resizes the layout viewport, which makes Chrome abort every
+     page view transition ("Viewport size changed"): the next page snaps in
+     unanimated. `clip` (not `hidden`) creates no scroll container, so sticky
+     positioning keeps working. */
+  html,
+  body {
+    overflow-x: clip;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
@@ -500,6 +511,12 @@
   view-transition-name: site-header;
 }
 .theme-switching .site-header {
+  view-transition-name: none;
+}
+/* While the menu is on screen (and while it closes) the header is drawn live
+   with the page: as its own group it would be snapshotted at the header bar's
+   size and squeeze the full-screen panel into it (see Header). */
+.site-header.menu-layer {
   view-transition-name: none;
 }
 

@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { LazyMotion, domAnimation, m, useInView, useReducedMotion } from "motion/react";
+import { LazyMotion, domAnimation, m, useInView } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 const EASE = [0.23, 1, 0.32, 1] as const;
 

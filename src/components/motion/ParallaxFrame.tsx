@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { LazyMotion, domAnimation, m, useReducedMotion, useScroll, useTransform } from "motion/react";
+import { LazyMotion, domAnimation, m, useScroll, useTransform } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
 
 /**

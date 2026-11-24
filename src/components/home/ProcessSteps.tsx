@@ -5,11 +5,11 @@ import {
   LazyMotion,
   domAnimation,
   m,
-  useReducedMotion,
   useScroll,
   useTransform,
   type MotionValue,
 } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import type { ProcessStage } from "@/types/content";
 
 /**

@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import { AnimatePresence, m, useReducedMotion } from "motion/react";
+import { AnimatePresence, m } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { ChevronRight } from "lucide-react";
 import { getProject, projects } from "@/content/projects";
 import { disciplines, disciplineSlug } from "@/content/disciplines";
@@ -17,6 +18,8 @@ type Props = {
   onOpenChange: (open: boolean) => void;
   /** The header element: focus stays inside it while the menu is open. */
   containerRef: React.RefObject<HTMLElement | null>;
+  /** Called once the panel has finished animating out. */
+  onExitComplete?: () => void;
 };
 
 const EASE_EXPO = [0.16, 1, 0.3, 1] as const;
@@ -35,6 +38,15 @@ const COLLAGE = [
   { slug: "electronics", left: 78, top: 62, turn: -6 },
 ];
 
+/**
+ * Transition type for every menu link. The panel is opaque and covers the page,
+ * so it is the transition: pages map this type to no view transition (see
+ * PageTransition) and simply swap underneath, then the panel lifts onto the new
+ * page. Cross-fading as well showed the old page through the lifting panel,
+ * half-blurred, overlapping the new one.
+ */
+const MENU_NAV = ["menu"];
+
 const posterProject = getProject("cities-of-bangladesh");
 const clientProject = getProject("merqetia");
 
@@ -46,7 +58,7 @@ const clientProject = getProject("merqetia");
  * panel out of the top while it shrinks slightly. Rendered inside the Header's
  * LazyMotion boundary.
  */
-export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
+export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: Props) {
   const pathname = usePathname();
   const panelId = useId();
   const toggleRef = useRef<HTMLButtonElement>(null);
@@ -143,7 +155,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
 
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={onExitComplete}>
         {open && (
           <m.div
             key="panel"
@@ -154,7 +166,22 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
             aria-label="Site menu"
             aria-busy={pending ? true : undefined}
             className="fixed inset-2 text-fg"
-            exit={reduce ? { opacity: 0, transition: { duration: 0.15 } } : { y: "-100%", scale: 0.95, transition: { duration: 0.5, ease: EASE_POWER3 } }}
+            // A whole `transform` string (not y/scale) so Motion hands the exit to
+            // the compositor: it closes right as the next page mounts, when the main
+            // thread is busiest, and a JS-driven exit stuttered there on phones.
+            exit={
+              reduce
+                ? { opacity: 0, pointerEvents: "none", transition: { duration: 0.15 } }
+                : {
+                    // Explicit start keyframe: from "none" Motion zero-fills the
+                    // functions, i.e. starts at scale(0), and the panel collapsed to a dot.
+                    transform: ["translateY(0%) scale(1)", "translateY(-100%) scale(0.95)"],
+                    // A closing panel takes no taps: a quick second tap otherwise landed on
+                    // whichever link had slid under the finger (About became Contact).
+                    pointerEvents: "none",
+                    transition: { duration: 0.5, ease: EASE_POWER3 },
+                  }
+            }
           >
             {/* The white sheet moves on its own; the content does not ride on it. */}
             <div aria-hidden className="absolute inset-0 [perspective:1000px]">
@@ -185,6 +212,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                     <Link
                       href="/services"
                       onClick={go("/services")}
+                      transitionTypes={MENU_NAV}
                       className="group relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[24px] bg-[#0c0c0e] p-5 text-center text-white ring-1 ring-line"
                     >
                       {COLLAGE.map((tile) => {
@@ -219,6 +247,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                       <Link
                         href={`/services/${posterProject.slug}`}
                         onClick={go(`/services/${posterProject.slug}`)}
+                        transitionTypes={MENU_NAV}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#e4e3dc] p-4 text-[#0c0c0e]"
                       >
                         <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-black/15 px-3.5 py-1 text-meta leading-tight">
@@ -237,6 +266,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                       <Link
                         href={`/services/${clientProject.slug}`}
                         onClick={go(`/services/${clientProject.slug}`)}
+                        transitionTypes={MENU_NAV}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#4900ea] p-4 text-white"
                       >
                         <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-white/30 px-3.5 py-1 text-meta leading-tight">
@@ -268,6 +298,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                             <Link
                               href={item.href}
                               onClick={go(item.href)}
+                              transitionTypes={MENU_NAV}
                               data-menu-first={i === 0 ? "" : undefined}
                               aria-current={pathname === item.href ? "page" : undefined}
                               className="flex items-center gap-3 py-0.5 text-[clamp(1.5rem,1.3rem+0.8vw,1.875rem)] leading-[1.22] font-medium tracking-[-0.02em] transition-opacity duration-(--dur-fast) group-hover/list:opacity-40 hover:opacity-100! focus-visible:opacity-100! aria-[current=page]:text-accent-ink"
@@ -296,6 +327,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                         <Link
                           href={`/services#${disciplineSlug(service)}`}
                           onClick={go(`/services#${disciplineSlug(service)}`)}
+                          transitionTypes={MENU_NAV}
                           className="link-underline inline-flex min-h-7 items-center gap-2 text-[0.9375rem]"
                         >
                           {service}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useActionState, useEffect, useRef } from "react";
-import { AnimatePresence, LazyMotion, domAnimation, m, useReducedMotion } from "motion/react";
+import { AnimatePresence, LazyMotion, domAnimation, m } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { Check, ChevronDown } from "lucide-react";
 import { submitInquiry } from "@/app/contact/actions";
 import { budgetRanges, projectTypes } from "@/content/contact";

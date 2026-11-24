@@ -5,11 +5,11 @@ import {
   LazyMotion,
   domAnimation,
   m,
-  useReducedMotion,
   useScroll,
   useTransform,
   type MotionValue,
 } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 /**
  * A statement that lights up word by word as it scrolls through the viewport,

@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, LazyMotion, domMax, m, useReducedMotion } from "motion/react";
+import { AnimatePresence, LazyMotion, domMax, m } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import type { Discipline, Project } from "@/types/content";
 import { cn } from "@/lib/cn";
 import { disciplineSlug } from "@/content/disciplines";

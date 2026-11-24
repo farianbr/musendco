@@ -7,10 +7,10 @@ import {
   LazyMotion,
   domAnimation,
   m,
-  useReducedMotion,
   useScroll,
   useTransform,
 } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { ArrowRight } from "lucide-react";
 import type { Project } from "@/types/content";
 import { ProjectMorph } from "@/components/motion/PageTransition";

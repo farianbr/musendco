@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { m, LazyMotion, domAnimation, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { m, LazyMotion, domAnimation, useMotionValue, useSpring } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 
 /**
  * Pulls its child gently toward the pointer. Motion values only, so the React

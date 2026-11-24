@@ -7,9 +7,9 @@ import {
   domAnimation,
   m,
   useMotionValueEvent,
-  useReducedMotion,
   useScroll,
 } from "motion/react";
+import { useReducedMotion } from "@/lib/use-reduced-motion";
 import { cn } from "@/lib/cn";
 import { Wordmark } from "@/components/ui/Wordmark";
 import { SiteMenu } from "./SiteMenu";
@@ -38,6 +38,14 @@ export function Header() {
     setMenuOpen(false);
   }
 
+  // True from opening until the panel's exit animation has finished. While the
+  // menu is on screen the header drops its own view-transition name (see
+  // .site-header.menu-layer): as a named group the browser snapshots it at the
+  // header bar's size, and the full-screen panel inside was drawn squeezed into
+  // that box while it closed over the next page.
+  const [menuMounted, setMenuMounted] = useState(false);
+  if (menuOpen && !menuMounted) setMenuMounted(true);
+
   const { scrollY } = useScroll();
   useMotionValueEvent(scrollY, "change", (y) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -54,7 +62,7 @@ export function Header() {
         onFocusCapture={() => setHidden(false)}
         animate={{ y: isHidden ? "-100%" : "0%" }}
         transition={reduce ? { duration: 0 } : { duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-        className="site-header fixed inset-x-0 top-0 z-50"
+        className={cn("site-header fixed inset-x-0 top-0 z-50", menuMounted && "menu-layer")}
       >
         <div
           className={cn(
@@ -85,7 +93,12 @@ export function Header() {
             >
               <ThemeToggle className="size-11" />
             </div>
-            <SiteMenu open={menuOpen} onOpenChange={setMenuOpen} containerRef={headerRef} />
+            <SiteMenu
+              open={menuOpen}
+              onOpenChange={setMenuOpen}
+              onExitComplete={() => setMenuMounted(false)}
+              containerRef={headerRef}
+            />
           </div>
         </div>
       </m.header>
