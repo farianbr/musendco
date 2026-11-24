@@ -17,5 +17,5 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: "/work/:slug",
+  matcher: "/services/:slug",
 };

@@ -7,7 +7,7 @@ import { useEffect, useId, useRef } from "react";
 import { AnimatePresence, m, useReducedMotion } from "motion/react";
 import { ChevronRight } from "lucide-react";
 import { getProject, projects } from "@/content/projects";
-import { services } from "@/content/services";
+import { disciplines, disciplineSlug } from "@/content/disciplines";
 import { navigation, site } from "@/content/site";
 import { cn } from "@/lib/cn";
 import { ThemeToggle } from "./ThemeToggle";
@@ -25,21 +25,21 @@ const EASE_DROP = [0.5, 0, 0.1, 1] as const;
 
 /** Scattered covers around the lead card's title. Offsets are percentages of the card. */
 const COLLAGE = [
-  { slug: "packaging-design", left: 3, top: 6, turn: -6 },
-  { slug: "cripto-digital-logo", left: 29, top: -5, turn: 4 },
-  { slug: "brochure-illustration", left: 55, top: -3, turn: -3 },
+  { slug: "chikfi-packaging", left: 3, top: 6, turn: -6 },
+  { slug: "furki-branding", left: 29, top: -5, turn: 4 },
+  { slug: "thumbnails", left: 55, top: -3, turn: -3 },
   { slug: "digital-detox-campaign", left: 78, top: 8, turn: 7 },
-  { slug: "magazine-layout", left: 4, top: 66, turn: 5 },
-  { slug: "photography", left: 29, top: 78, turn: -4 },
+  { slug: "premium-packaging", left: 4, top: 66, turn: 5 },
+  { slug: "think-space", left: 29, top: 78, turn: -4 },
   { slug: "carclinic-stationery", left: 55, top: 76, turn: 5 },
-  { slug: "taka-banknote-redesign", left: 78, top: 62, turn: -6 },
+  { slug: "electronics", left: 78, top: 62, turn: -6 },
 ];
 
 const posterProject = getProject("cities-of-bangladesh");
 const clientProject = getProject("merqetia");
 
 /**
- * Centre pill that opens a full-screen panel. Timings were measured from the
+ * Orange pill (header, right) that opens a full-screen panel. Timings were measured from the
  * reference menu frame by frame: the panel drops in from above while rotating
  * flat in 3D, cards rise from below 200ms apart, links settle out of a slight
  * zoom 90ms apart, and the divider draws from the left. Closing lifts the whole
@@ -148,7 +148,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
               />
             </div>
 
-            <m.div {...settle(0.3, { opacity: 0 })} className="absolute top-4 right-4 z-10 lg:top-6 lg:right-6">
+            <m.div {...settle(0.3, { opacity: 0 })} className="absolute top-4 left-4 z-10 lg:top-6 lg:left-6">
               <ThemeToggle />
             </m.div>
 
@@ -158,27 +158,27 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                 <div className="order-3 grid grid-cols-2 grid-rows-[minmax(13rem,1fr)_minmax(11rem,1fr)] gap-3.5 [perspective:1000px] lg:order-none lg:col-span-5 lg:h-[calc(100dvh-144px)] lg:min-h-[28rem]">
                   <m.div {...card(0)} className="col-span-2 min-h-0">
                     <Link
-                      href="/work"
+                      href="/services"
                       onClick={close}
                       className="group relative flex h-full flex-col items-center justify-center overflow-hidden rounded-[24px] bg-[#0c0c0e] p-5 text-center text-white"
                     >
                       {COLLAGE.map((tile) => {
-                        const cover = getProject(tile.slug)?.cover.src;
+                        const cover = getProject(tile.slug)?.cover;
                         if (!cover) return null;
                         return (
                           <span
                             key={tile.slug}
                             aria-hidden
-                            className="absolute aspect-[4/3] w-[24%] overflow-hidden rounded-lg shadow-xl transition-transform duration-[900ms] ease-out group-hover:scale-105 motion-reduce:transition-none"
-                            style={{ left: `${tile.left}%`, top: `${tile.top}%`, rotate: `${tile.turn}deg` }}
+                            className="absolute w-[20%] overflow-hidden rounded-lg shadow-xl transition-transform duration-[900ms] ease-out group-hover:scale-105 motion-reduce:transition-none"
+                            style={{ left: `${tile.left}%`, top: `${tile.top}%`, rotate: `${tile.turn}deg`, aspectRatio: `${cover.width} / ${cover.height}` }}
                           >
-                            <Image src={cover} alt="" fill sizes="(min-width: 1024px) 10vw, 25vw" className="object-cover" />
+                            <Image src={cover.src} alt="" fill sizes="(min-width: 1024px) 10vw, 25vw" className="object-cover" />
                           </span>
                         );
                       })}
                       <span aria-hidden className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#0c0c0e_34%,rgb(12_12_14/0.25)_78%)]" />
                       <span className="relative text-mono text-white/70">{projects.length} projects</span>
-                      <span className="relative mt-1 text-heading font-medium">Selected work</span>
+                      <span className="relative mt-1 text-heading font-medium">Our services</span>
                       <span className="relative mt-4 inline-flex items-center gap-0.5">
                         <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md transition-transform duration-(--dur) ease-out group-hover:translate-x-0.5">
                           <ChevronRight aria-hidden strokeWidth={2} className="size-4" />
@@ -192,7 +192,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                   {posterProject && (
                     <m.div {...card(1)} className="min-h-0">
                       <Link
-                        href={`/work/${posterProject.slug}`}
+                        href={`/services/${posterProject.slug}`}
                         onClick={close}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#e4e3dc] p-4 text-[#0c0c0e]"
                       >
@@ -210,9 +210,9 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                   {clientProject && (
                     <m.div {...card(2)} className="min-h-0">
                       <Link
-                        href={`/work/${clientProject.slug}`}
+                        href={`/services/${clientProject.slug}`}
                         onClick={close}
-                        className="group relative block h-full overflow-hidden rounded-[24px] bg-[#0b3440] p-4 text-white"
+                        className="group relative block h-full overflow-hidden rounded-[24px] bg-[#4900ea] p-4 text-white"
                       >
                         <span className="relative z-10 inline-flex min-h-8 items-center rounded-full border border-white/30 px-3.5 text-meta">
                           Client case
@@ -243,7 +243,7 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                               onClick={close}
                               data-menu-first={i === 0 ? "" : undefined}
                               aria-current={pathname === item.href ? "page" : undefined}
-                              className="block py-0.5 text-[clamp(1.5rem,1.3rem+0.8vw,1.875rem)] leading-[1.22] font-medium tracking-[-0.02em] transition-opacity duration-(--dur-fast) group-hover/list:opacity-40 hover:opacity-100! focus-visible:opacity-100! aria-[current=page]:text-accent"
+                              className="block py-0.5 text-[clamp(1.5rem,1.3rem+0.8vw,1.875rem)] leading-[1.22] font-medium tracking-[-0.02em] transition-opacity duration-(--dur-fast) group-hover/list:opacity-40 hover:opacity-100! focus-visible:opacity-100! aria-[current=page]:text-accent-ink"
                             >
                               {item.label}
                             </Link>
@@ -258,19 +258,19 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
                   </div>
                 </div>
 
-                <nav aria-label="Expertise" className="order-2 lg:order-none lg:col-span-2 lg:col-start-10 lg:pt-6">
+                <nav aria-label="Services" className="order-2 lg:order-none lg:col-span-2 lg:col-start-10 lg:pt-6">
                   <m.p {...settle(0.2, { opacity: 0 })} className="text-meta font-medium text-muted uppercase">
-                    Expertise
+                    Services
                   </m.p>
                   <ul className="mt-3">
-                    {services.map((service, i) => (
-                      <m.li key={service.slug} {...settle(0.27 + i * 0.088, { x: 15, scale: 1.05, opacity: 0 })} className="origin-left">
+                    {disciplines.map((service, i) => (
+                      <m.li key={service} {...settle(0.27 + i * 0.088, { x: 15, scale: 1.05, opacity: 0 })} className="origin-left">
                         <Link
-                          href={`/services#${service.slug}`}
+                          href={`/services#${disciplineSlug(service)}`}
                           onClick={close}
                           className="link-underline inline-flex min-h-7 items-center text-[0.9375rem]"
                         >
-                          {service.name}
+                          {service}
                         </Link>
                       </m.li>
                     ))}
@@ -293,8 +293,8 @@ export function SiteMenu({ open, onOpenChange, containerRef }: Props) {
         aria-label={open ? "Close menu" : "Open menu"}
         onClick={() => onOpenChange(!open)}
         className={cn(
-          "group/menu relative z-10 inline-flex h-11 items-center gap-2.5 rounded-2xl pr-5 pl-4 text-[0.875rem] font-medium backdrop-blur-xl transition-[background-color,color] duration-[370ms] ease-out",
-          open ? "bg-[#076b45] text-[#f3f3f0]" : "bg-raised/80 text-fg hover:bg-raised",
+          "menu-pill pressable group/menu relative z-10 inline-flex h-11 items-center gap-3 rounded-full pr-6 pl-5 text-[0.9375rem] font-semibold tracking-[-0.01em] transition-[background-color,color,box-shadow,transform] duration-[370ms] ease-out lg:h-12",
+          open ? "bg-[#121214] text-white" : "bg-accent text-on-accent hover:-translate-y-px",
         )}
       >
         <MenuDots open={open} />

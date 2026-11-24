@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <section className="shell flex min-h-[80dvh] flex-col justify-end pt-[calc(var(--header-h)+4rem)] pb-(--space-block)">
-      <p className="enter-fade font-mono text-mono text-accent" style={{ "--delay": "0ms" } as React.CSSProperties}>
+      <p className="enter-fade font-mono text-mono text-accent-ink" style={{ "--delay": "0ms" } as React.CSSProperties}>
         404
       </p>
       <h1 className="enter-words mt-6 max-w-[14ch] text-title font-medium">
@@ -20,7 +20,7 @@ export default function NotFound() {
       </p>
       <div className="enter-fade mt-8 flex flex-wrap gap-x-8" style={{ "--delay": "450ms" } as React.CSSProperties}>
         <ArrowLink href="/">Home</ArrowLink>
-        <ArrowLink href="/work">Work</ArrowLink>
+        <ArrowLink href="/services">Services</ArrowLink>
         <ArrowLink href="/contact">Contact</ArrowLink>
       </div>
     </section>

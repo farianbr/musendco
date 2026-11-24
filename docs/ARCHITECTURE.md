@@ -35,11 +35,10 @@ src/
 │   ├── services/ FaqList*
 │   ├── contact/  ContactForm*
 │   ├── motion/   PageTransition (ViewTransition wrappers), ParallaxImage*, Magnetic*, RevealObserver*
-│   └── ui/       ButtonLink, ArrowLink, SplitWords, ClientMark, CopyEmail*, Wordmark
+│   └── ui/       ButtonLink, ArrowLink, SplitWords, ClientMark, CopyEmail*, Wordmark, Brand, FitImage
 ├── content/      site, home, projects, people, services, process, about, contact
 ├── lib/          cn, site-url, contact/{validation, deliver, rate-limit}
 └── types/content.ts
-scripts/fetch-demo-images.mjs
 ```
 
 `*` = Client Component. Every client component is a leaf that receives plain data as props.

@@ -1,5 +1,4 @@
 import { home } from "@/content/home";
-import { services } from "@/content/services";
 import { processStages } from "@/content/process";
 import { testimonials } from "@/content/people";
 import { PageTransition } from "@/components/motion/PageTransition";
@@ -8,11 +7,13 @@ import { Hero } from "@/components/home/Hero";
 import { ClientMarquee } from "@/components/home/ClientMarquee";
 import { SelectedWork } from "@/components/home/SelectedWork";
 import { Stats } from "@/components/home/Stats";
-import { ServicesExplorer } from "@/components/home/ServicesExplorer";
 import { Manifesto } from "@/components/home/Manifesto";
 import { ProcessSteps } from "@/components/home/ProcessSteps";
 import { Testimonials } from "@/components/home/Testimonials";
 import { ClosingCta } from "@/components/home/ClosingCta";
+import { AboutBento } from "@/components/about/AboutBento";
+import { Toolbox } from "@/components/about/Toolbox";
+import { ButtonLink } from "@/components/ui/ButtonLink";
 
 export default function HomePage() {
   return (
@@ -21,13 +22,6 @@ export default function HomePage() {
       <ClientMarquee />
       <SelectedWork />
       <Stats />
-
-      <section aria-labelledby="services-heading" className="shell section-y">
-        <h2 id="services-heading" data-reveal="words" className="mb-(--space-block) text-title font-medium">
-          <SplitWords parts={home.services.heading} />
-        </h2>
-        <ServicesExplorer services={services} />
-      </section>
 
       <section aria-label="Our approach" className="border-y border-line bg-surface">
         <div className="shell py-(--space-section)">
@@ -51,12 +45,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section aria-labelledby="testimonials-heading" className="shell pb-(--space-section)">
-        <h2 id="testimonials-heading" className="mb-8 font-mono text-mono text-muted uppercase">
-          {home.testimonials.heading}
-        </h2>
-        <Testimonials items={testimonials} />
+      <section aria-labelledby="about-intro-heading" className="shell pb-(--space-section)">
+        <div className="mb-(--space-block) flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
+          <div>
+            <p data-reveal="fade" className="font-mono text-mono text-muted uppercase">
+              ( {home.about.eyebrow} )
+            </p>
+            <h2 id="about-intro-heading" data-reveal="words" className="mt-4 max-w-[18ch] text-title font-medium">
+              <SplitWords parts={[{ text: home.about.lead }, { text: home.about.emphasis, em: true }]} />
+            </h2>
+          </div>
+          <div data-reveal="fade">
+            <ButtonLink href="/about" variant="secondary" arrow>
+              More about Muse
+            </ButtonLink>
+          </div>
+        </div>
+        <AboutBento stats={false} />
+        <Toolbox />
       </section>
+
+      <Testimonials items={testimonials} />
 
       <ClosingCta />
     </PageTransition>

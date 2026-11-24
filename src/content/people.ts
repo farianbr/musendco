@@ -1,12 +1,25 @@
-import type { Client, Faq, TeamMember, Testimonial } from "@/types/content";
+import type { Client, Faq, Testimonial } from "@/types/content";
 
 /**
- * Clients named on the project sources. Marks are generated until real logos
- * are supplied. Confirm permission to show each name before launch.
+ * Clients. Marks are generated until real logos are supplied. Confirm
+ * permission to show each name before launch.
  */
 export const clients: Client[] = [
-  { name: "SKRP Group", glyph: "diamond", case: "upper" },
+  { name: "Sony", glyph: "square", case: "upper" },
+  { name: "KENT", glyph: "ring", case: "upper" },
+  { name: "UNICEF", glyph: "circle", case: "upper" },
+  { name: "Domino's", glyph: "diamond", case: "title" },
+  { name: "Kelinto", glyph: "half", case: "title" },
   { name: "merQetia", glyph: "bars", case: "title" },
+  { name: "Cellshoppe", glyph: "arc", case: "title" },
+  { name: "Hindware", glyph: "triangle", case: "title" },
+  { name: "Hitachi", glyph: "square", case: "upper" },
+  { name: "NT Blu Ray", glyph: "ring", case: "title" },
+  { name: "1 ms", glyph: "bars", case: "lower" },
+  { name: "Revenant eSports", glyph: "triangle", case: "title" },
+  { name: "MSI", glyph: "diamond", case: "upper" },
+  { name: "Ashol Incorporated", glyph: "half", case: "title" },
+  { name: "SKRP Group", glyph: "diamond", case: "upper" },
   { name: "CarClinic", glyph: "arc", case: "title" },
   { name: "Baby Basket", glyph: "circle", case: "title" },
   { name: "The BlackBoard", glyph: "square", case: "title" },
@@ -26,7 +39,7 @@ export const testimonials: Testimonial[] = [
   {
     id: "ondine",
     quote:
-      "Musendco gave us a brand that looks expensive and feels honest. Retailers asked about the packaging before they asked about the product.",
+      "Muse gave us a brand that looks expensive and feels honest. Retailers asked about the packaging before they asked about the product.",
     name: "Céline Moreau",
     role: "Co-founder",
     company: "Ondine Skincare",
@@ -47,25 +60,49 @@ export const testimonials: Testimonial[] = [
     role: "Clinical Director",
     company: "Aurel Health",
   },
-];
-
-/** Titles from each person's own profile. */
-export const team: TeamMember[] = [
   {
-    name: "Showaeb Bhuyan Shuvo",
-    role: "Graphic Designer",
-    focus: "Branding, packaging, print and campaigns",
-    photo: { src: "/team/showaeb-bhuyan-shuvo.webp", alt: "Portrait of Showaeb Bhuyan Shuvo", width: 800, height: 800 },
+    id: "northvale",
+    quote:
+      "The packaging did the selling for us. Our first run sold out in eleven days, and every reorder since has come with a photo of the box.",
+    name: "Priya Raman",
+    role: "Founder",
+    company: "Northvale Tea Co.",
   },
   {
-    name: "Farian Bin Rahman",
-    role: "Full-Stack Developer",
-    focus: "Websites and web products, end to end",
-    photo: { src: "/team/farian-rahman.webp", alt: "Portrait of Farian Bin Rahman", width: 800, height: 800 },
+    id: "brightloop",
+    quote:
+      "Our thumbnails finally look like one channel instead of five freelancers. Click-through went up and stayed up.",
+    name: "Marcus Webb",
+    role: "Head of Content",
+    company: "Brightloop Media",
+  },
+  {
+    id: "kilnworks",
+    quote:
+      "Shuvo asked better questions in the first call than we had asked ourselves in a year. The identity came straight out of those answers.",
+    name: "Elena Novak",
+    role: "Managing Director",
+    company: "Kilnworks Studio",
+  },
+  {
+    id: "harbourline",
+    quote:
+      "Clear timelines, no surprises, and work that was ready the day they said it would be. That is rarer than it should be.",
+    name: "Tom Hartley",
+    role: "Operations Lead",
+    company: "Harbourline Logistics",
+  },
+  {
+    id: "saffron-sage",
+    quote:
+      "The illustrations gave our menu a personality people talk about. Guests photograph the walls now.",
+    name: "Aisha Karim",
+    role: "Owner",
+    company: "Saffron & Sage",
   },
 ];
 
-/** DEMO answers. Confirm terms with Musendco before launch. */
+/** DEMO answers. Confirm terms with Muse before launch. */
 export const faqs: Faq[] = [
   {
     question: "How long does a typical project take?",

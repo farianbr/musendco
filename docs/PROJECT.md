@@ -27,7 +27,7 @@ Nothing else about the business has been confirmed. The repository started empty
 
 | Assumption | Where it lives | Action needed |
 | --- | --- | --- |
-| Services: Brand identity, Digital product design, Websites & development, Art direction & content | `src/content/services.ts` | Confirm, rename, add or remove |
+| Services: Branding, SaaS & Websites, Packaging, Social Media & Thumbnails, Illustration | `src/content/disciplines.ts` | Confirm, rename, add or remove |
 | Contact email `hello@musendco.com` | `src/content/site.ts` | Confirm the mailbox exists |
 | Five-stage process (Discovery → Support) | `src/content/process.ts` | Replace with the real workflow |
 | Studio principles and About copy | `src/content/about.ts` | Rewrite in the agency's own voice |
@@ -56,9 +56,8 @@ All draft copy is original and makes no claims about clients, awards, results, h
 | Route | Purpose | Status |
 | --- | --- | --- |
 | `/` | Hero, selected work, services, approach, process, closing invitation | Built |
-| `/work` | Index of all projects with scannable metadata | Built |
-| `/work/[slug]` | Case study, block-based and per-project | Built (sample content) |
-| `/services` | Services in detail and process | Built |
+| `/services` | Projects presented by service (was `/work`, redirects in place) | Built |
+| `/services/[slug]` | Case study, block-based and per-project | Built |
 | `/about` | Studio point of view, principles, collaboration | Built (draft copy) |
 | `/contact` | Inquiry form and direct contact | Built |
 | `/sitemap.xml`, `/robots.txt` | SEO | Built |

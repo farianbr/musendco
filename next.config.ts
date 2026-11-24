@@ -20,6 +20,13 @@ const nextConfig: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
+  // /work became /services (projects are now presented by service).
+  async redirects() {
+    return [
+      { source: "/work", destination: "/services", permanent: true },
+      { source: "/work/:slug", destination: "/services/:slug", permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

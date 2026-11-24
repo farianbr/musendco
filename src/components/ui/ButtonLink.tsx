@@ -30,7 +30,7 @@ export function buttonClasses({
     size === "small" ? "min-h-10 px-4.5 text-meta" : "min-h-13 px-7 text-[0.9375rem]",
     variant === "primary" && "bg-accent text-on-accent hover:brightness-110",
     variant === "secondary" && "border border-line-strong text-fg hover:border-fg hover:bg-fg hover:text-bg",
-    variant === "ghost" && "text-fg hover:text-accent",
+    variant === "ghost" && "text-fg hover:text-accent-ink",
   );
 }
 

@@ -1,7 +1,5 @@
 import { home } from "@/content/home";
-import { site } from "@/content/site";
 import { ButtonLink } from "@/components/ui/ButtonLink";
-import { CopyEmail } from "@/components/ui/CopyEmail";
 import { SplitWords } from "@/components/ui/SplitWords";
 import { Magnetic } from "@/components/motion/Magnetic";
 
@@ -18,7 +16,6 @@ export function ClosingCta() {
         <div className="mt-6 grid gap-6 md:grid-cols-2 md:items-end" data-reveal="fade">
           <div>
             <p className="max-w-[46ch] text-lead text-fg-2">{intro}</p>
-            <CopyEmail email={site.email} className="mt-5 flex items-center gap-3" />
           </div>
           <div className="md:justify-self-end">
             <Magnetic strength={0.35}>

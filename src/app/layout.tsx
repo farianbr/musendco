@@ -1,34 +1,20 @@
 import type { Metadata, Viewport } from "next";
-import { Geist_Mono, Schibsted_Grotesk } from "next/font/google";
 import { site } from "@/content/site";
 import { absoluteUrl, siteUrl } from "@/lib/site-url";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
-const schibsted = Schibsted_Grotesk({
-  variable: "--font-schibsted",
-  subsets: ["latin"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   metadataBase: siteUrl,
   title: {
-    default: `${site.name}: ${site.tagline}`,
-    template: `%s · ${site.name}`,
+    default: site.legalName,
+    template: `%s - ${site.legalName}`,
   },
   description: site.description,
   applicationName: site.name,
   alternates: { canonical: "/" },
-  openGraph: { type: "website", siteName: site.name, locale: "en", url: "/" },
+  openGraph: { type: "website", siteName: site.legalName, locale: "en", url: "/" },
   twitter: { card: "summary_large_image" },
 };
 
@@ -40,7 +26,10 @@ const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: site.name,
+  legalName: site.legalName,
   url: absoluteUrl("/"),
+  logo: absoluteUrl("/brand/muse-logo-dark.svg"),
+  address: { "@type": "PostalAddress", addressLocality: "Luton", addressCountry: "GB" },
   description: site.description,
 };
 
@@ -51,7 +40,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${schibsted.variable} ${geistMono.variable}`}
       data-scroll-behavior="smooth"
       suppressHydrationWarning
     >

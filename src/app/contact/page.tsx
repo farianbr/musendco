@@ -8,7 +8,7 @@ import { CopyEmail } from "@/components/ui/CopyEmail";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "Start a project with Musendco. Tell us what you are making, or email us directly.",
+  description: "Start a project with Muse. Tell us what you are making, or email us directly.",
   alternates: { canonical: "/contact" },
   openGraph: { url: "/contact" },
 };

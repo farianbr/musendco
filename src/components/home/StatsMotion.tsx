@@ -51,7 +51,7 @@ export function GrowthChart({ points }: { points: { year: number; total: number 
             transition={{ duration: 0.5, ease: EASE, delay: reduce ? 0 : 0.2 + i * 0.35 }}
           >
             <span className="block size-2 rounded-full bg-accent" />
-            <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-full bg-raised px-2.5 py-1 font-mono text-mono text-accent tabular">
+            <span className="absolute bottom-full left-1/2 mb-2 -translate-x-1/2 rounded-full bg-raised px-2.5 py-1 font-mono text-mono text-accent-ink tabular">
               {c.total}
             </span>
             <span className="absolute top-full left-1/2 mt-2 -translate-x-1/2 font-mono text-mono text-muted tabular">
@@ -72,7 +72,7 @@ export function RollingNumber({ value }: { value: string }) {
   const shown = reduce || inView;
 
   return (
-    <span ref={ref} className="inline-flex text-[clamp(2.25rem,1.9rem+1.4vw,3rem)] leading-none font-medium tracking-[-0.03em] text-accent tabular">
+    <span ref={ref} className="inline-flex text-[clamp(2.25rem,1.9rem+1.4vw,3rem)] leading-none font-medium tracking-[-0.03em] text-accent-ink tabular">
       <span className="sr-only">{value}</span>
       {[...value].map((digit, i) => (
         <span key={i} aria-hidden className="relative block h-[1em] overflow-hidden">

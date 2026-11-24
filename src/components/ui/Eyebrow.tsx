@@ -5,7 +5,7 @@ export function Eyebrow({ children, className }: { children: React.ReactNode; cl
   return (
     <p
       data-reveal="fade"
-      className={cn("inline-flex min-h-8 items-center rounded-full border border-accent/50 px-3.5 text-meta text-accent", className)}
+      className={cn("inline-flex min-h-8 items-center rounded-full border border-accent/50 px-3.5 text-meta text-accent-ink", className)}
     >
       {children}
     </p>

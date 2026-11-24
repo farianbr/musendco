@@ -5,28 +5,27 @@ import type { SocialLink } from "@/types/content";
  * Anything marked UNCONFIRMED must be verified before launch (docs/CONTENT.md).
  */
 export const site = {
-  name: "Musendco",
-  tagline: "Brand identity, digital products and websites",
+  /** Brand name everywhere except the footer's legal line. */
+  name: "Muse",
+  /** Footer and copyright only. */
+  legalName: "Muse & Co.",
+  tagline: "Brand identity, packaging, social and websites",
   description:
-    "Musendco is a creative agency for brand identity, digital products and websites. Strategy, design and engineering in one team.",
+    "Muse is a creative studio for brand identity, packaging, social content, illustration and websites. Based in Luton, UK, working with clients worldwide.",
   /** UNCONFIRMED: verify this mailbox exists before launch. */
   email: "hello@musendco.com",
-  /** From the Behance profile (https://www.behance.net/shuvo24). */
-  location: "Dhaka, Bangladesh",
+  location: "Luton, UK",
+  availability: "Available worldwide",
+  /** Studio coordinates for the About globe. */
+  coordinates: [51.8787, -0.42] as [number, number],
   social: [
     { label: "Behance", href: "https://www.behance.net/shuvo24" },
     { label: "Instagram", href: "https://www.instagram.com/cripto_arts_" },
     { label: "Facebook", href: "https://www.facebook.com/Shuvo.bhuiya180" },
   ] as SocialLink[],
-  /**
-   * While true, the footer states that testimonials are placeholders. Set to
-   * false once src/content/people.ts holds approved quotes.
-   */
-  demoContent: true,
 } as const;
 
 export const navigation = [
-  { label: "Work", href: "/work" },
   { label: "Services", href: "/services" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },

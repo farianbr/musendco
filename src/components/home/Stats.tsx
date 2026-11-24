@@ -29,7 +29,7 @@ function Figure({ plain, accent }: { plain: string; accent?: string }) {
   return (
     <p className="text-[clamp(2.5rem,2rem+2vw,3.5rem)] leading-none font-medium tracking-[-0.04em] tabular">
       {plain}
-      {accent && <span className="text-accent">{accent}</span>}
+      {accent && <span className="text-accent-ink">{accent}</span>}
     </p>
   );
 }
@@ -37,7 +37,7 @@ function Figure({ plain, accent }: { plain: string; accent?: string }) {
 function Label({ plain, accent }: { plain: string; accent: string }) {
   return (
     <h3 className="mt-5 text-subheading font-medium">
-      {plain} <span className="text-accent">{accent}</span>
+      {plain} <span className="text-accent-ink">{accent}</span>
     </h3>
   );
 }
@@ -53,7 +53,7 @@ export function Stats() {
         </p>
         <h2 id="stats-heading" data-reveal="words" className="mt-3 text-title font-medium">
           <SplitWords parts="Results" />
-          <span className="text-accent">
+          <span className="text-accent-ink">
             <SplitWords parts="that matter." offset={1} />
           </span>
         </h2>
@@ -92,7 +92,7 @@ export function Stats() {
 
         <Card className="md:col-span-3">
           <Figure plain={String(disciplines.length).padStart(2, "0")} />
-          <Label plain="Core" accent="disciplines" />
+          <Label plain="Core" accent="services" />
           <p className="mt-2 text-[0.9375rem] text-fg-2">One team, so nothing gets lost between them.</p>
           <ul className="mt-auto flex flex-wrap gap-1.5 pt-6">
             {disciplines.map((discipline) => (
@@ -107,7 +107,7 @@ export function Stats() {
           <Figure plain={String(clients.length).padStart(2, "0")} />
           <Label plain="Named" accent="clients" />
           <p className="mt-2 max-w-[44ch] text-[0.9375rem] text-fg-2">
-            Packaging, stationery, campaigns and a full order platform for businesses in two countries.
+            From global electronics and esports to retail and growth agencies, wherever they are.
           </p>
           <div aria-hidden className="marquee marquee-fade mt-auto overflow-hidden pt-8">
             <div className="marquee-track flex w-max" style={{ "--marquee-duration": "32s" } as React.CSSProperties}>

@@ -4,7 +4,7 @@ Tokens live in `src/app/globals.css` (`:root` for the dark default, `[data-theme
 
 ## Direction
 
-Dark, high-craft agency portfolio. Near-black canvas, off-white type, one emerald accent. The work carries the colour; the interface stays quiet so motion and imagery can lead. Built with the `design-taste-frontend` (taste-skill) and `emil-design-eng` guidance.
+Dark, high-craft studio portfolio for **Muse**. Near-black canvas, off-white type, brand orange accent with violet, purple and amber as supporting colour (hero aura, card tints, glows). The work carries the colour; the interface stays quiet so motion and imagery can lead. Built with the `design-taste-frontend` (taste-skill) and `emil-design-eng` guidance.
 
 Dials (taste-skill): **variance 8, motion 8, density 3**.
 
@@ -27,16 +27,17 @@ Rules taken from those guides and enforced here:
 | `fg-2` | `#b5b5af` | `#3b3b3f` | Body copy (≥ 8.2:1) |
 | `muted` | `#8a8a84` | `#5e5e62` | Metadata (≥ 4.9:1 on every surface) |
 | `line` / `line-strong` | 10% / 22% fg | 12% / 26% fg | Hairlines, outlines |
-| `accent` | `#3ddc97` | `#076b45` | Primary CTA, focus, active (≥ 9.6:1 dark) |
-| `on-accent` | `#06140d` | `#f3f3f0` | Text on accent |
+| `accent` | `#ff5931` | `#ff5931` | Primary CTA, menu pill, focus, active fills |
+| `accent-ink` | `#ff5931` | `#c2330f` | Accent used as text (6.3:1 dark, 5:1 light) |
+| `on-accent` | `#0b0b0c` | `#0b0b0c` | Text on accent (6.3:1) |
+| `brand-violet` / `brand-purple` / `brand-amber` | `#4900ea` / `#ab5bd4` / `#ffb658` | same | Supporting colour only: aura, gradients, tints. Never body text |
 | `danger` | `#ff7a6b` | `#b42318` | Form errors only |
 
 Dark is the default. The toggle (header and mobile menu) stores `light` in `localStorage`; an inline script applies it before first paint.
 
 ## Typography
 
-- **Schibsted Grotesk** (variable, roman + italic): everything.
-- **Geist Mono**: small metadata (indexes, years, labels) only.
+- **Helvetica Neue** (system stack, roman + italic): everything, including small labels.
 
 | Token | Size | Use |
 | --- | --- | --- |

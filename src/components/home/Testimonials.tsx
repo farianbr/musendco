@@ -1,106 +1,149 @@
-"use client";
-
-import { useState } from "react";
-import { AnimatePresence, LazyMotion, domMax, m, useReducedMotion, type PanInfo } from "motion/react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { Quote } from "lucide-react";
+import { home } from "@/content/home";
 import type { Testimonial } from "@/types/content";
+import { SplitWords } from "@/components/ui/SplitWords";
+import { cn } from "@/lib/cn";
 
-const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+type Tone = "orange" | "violet" | "plain";
+
+function initials(name: string) {
+  return name
+    .replace(/^Dr\.?\s+/, "")
+    .split(/\s+/)
+    .map((part) => part[0])
+    .slice(0, 2)
+    .join("");
+}
+
+/** Two cards carry brand colour; everything else sits on the surface. */
+function toneFor(index: number): Tone {
+  if (index === 0) return "orange";
+  if (index === 4) return "violet";
+  return "plain";
+}
+
+function columns(items: Testimonial[], count: number) {
+  const cols: { item: Testimonial; index: number }[][] = Array.from({ length: count }, () => []);
+  items.forEach((item, index) => cols[index % count].push({ item, index }));
+  return cols;
+}
 
 /**
- * One quote at a time. Arrows, the index buttons, or a horizontal swipe move
- * between quotes. A quick flick is enough: velocity counts, not just distance.
+ * Testimonials as a living wall: columns of quote cards drift slowly up and
+ * down in alternating directions, fading out at the top and bottom edges,
+ * and pause while hovered so any card can be read. Phones get a swipeable
+ * row instead. Under reduced motion the columns simply stand still.
+ * Shared by Home and About.
  */
 export function Testimonials({ items }: { items: Testimonial[] }) {
-  const [[index, direction], setState] = useState<[number, number]>([0, 0]);
-  const reduce = useReducedMotion();
-  const item = items[index];
-
-  const paginate = (step: number) =>
-    setState(([i]) => [(i + step + items.length) % items.length, step]);
-
-  const onDragEnd = (_: unknown, info: PanInfo) => {
-    const swipe = Math.abs(info.offset.x) > 80 || Math.abs(info.velocity.x) > 400;
-    if (swipe) paginate(info.offset.x < 0 ? 1 : -1);
-  };
+  const { eyebrow, lead, emphasis, intro } = home.testimonials;
 
   return (
-    <LazyMotion features={domMax} strict>
-      <div className="grid-12 gap-y-10">
-        <div className="relative col-span-4 min-h-[15rem] md:col-span-10 md:min-h-[11rem]" aria-live="polite">
-          <AnimatePresence initial={false} mode="popLayout" custom={direction}>
-            <m.figure
-              key={item.id}
-              custom={direction}
-              variants={{
-                enter: (d: number) =>
-                  reduce ? { opacity: 0 } : { opacity: 0, x: d * 48, filter: "blur(8px)" },
-                center: { opacity: 1, x: 0, filter: "blur(0px)" },
-                exit: (d: number) =>
-                  reduce
-                    ? { opacity: 0, transition: { duration: 0.15 } }
-                    : { opacity: 0, x: d * -32, filter: "blur(6px)", transition: { duration: 0.25, ease: EASE_OUT } },
-              }}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.6, ease: EASE_OUT }}
-              drag={reduce ? false : "x"}
-              dragConstraints={{ left: 0, right: 0 }}
-              dragElastic={0.18}
-              onDragEnd={onDragEnd}
-              className="cursor-grab touch-pan-y active:cursor-grabbing"
-            >
-              <blockquote className="max-w-[46ch] text-heading font-medium select-none">
-                <p>&ldquo;{item.quote}&rdquo;</p>
-              </blockquote>
-              <figcaption className="mt-5 flex flex-wrap items-baseline gap-x-3 text-meta">
-                <span className="font-medium text-fg">{item.name}</span>
-                <span className="text-muted">
-                  {item.role}, {item.company}
-                </span>
-              </figcaption>
-            </m.figure>
-          </AnimatePresence>
+    <section aria-labelledby="testimonials-heading" className="pb-(--space-section)">
+      <div className="shell flex flex-wrap items-end justify-between gap-x-10 gap-y-5">
+        <div>
+          <p data-reveal="fade" className="font-mono text-mono text-muted uppercase">
+            ( {eyebrow} )
+          </p>
+          <h2 id="testimonials-heading" data-reveal="words" className="mt-4 max-w-[18ch] text-title font-medium">
+            <SplitWords parts={[{ text: lead }, { text: emphasis, em: true }]} />
+          </h2>
         </div>
-
-        <div className="col-span-4 flex items-center justify-between gap-6 md:col-span-12">
-          <div className="flex gap-1.5" role="group" aria-label="Choose testimonial">
-            {items.map((t, i) => (
-              <button
-                key={t.id}
-                type="button"
-                aria-label={`Quote from ${t.name}`}
-                aria-pressed={i === index}
-                onClick={() => setState([i, i > index ? 1 : -1])}
-                className="flex h-8 w-9 items-center"
-              >
-                <span
-                  className={`block h-0.5 w-full rounded-full transition-colors duration-(--dur) ${i === index ? "bg-fg" : "bg-line-strong hover:bg-muted"}`}
-                />
-              </button>
-            ))}
-          </div>
-          <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={() => paginate(-1)}
-              aria-label="Previous quote"
-              className="pressable inline-flex size-12 items-center justify-center rounded-full border border-line-strong hover:border-fg"
-            >
-              <ArrowLeft aria-hidden strokeWidth={1.75} className="size-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => paginate(1)}
-              aria-label="Next quote"
-              className="pressable inline-flex size-12 items-center justify-center rounded-full border border-line-strong hover:border-fg"
-            >
-              <ArrowRight aria-hidden strokeWidth={1.75} className="size-4" />
-            </button>
-          </div>
-        </div>
+        <p data-reveal="fade" className="max-w-[38ch] text-lead text-fg-2">
+          {intro}
+        </p>
       </div>
-    </LazyMotion>
+
+      {/* Phones: one swipeable row. */}
+      <ul className="mt-(--space-block) flex snap-x snap-mandatory scroll-px-(--gutter) gap-3 overflow-x-auto px-(--gutter) pb-2 [scrollbar-width:none] md:hidden">
+        {items.map((item, index) => (
+          <li key={item.id} className="w-[84vw] max-w-[22rem] shrink-0 snap-start">
+            <Card item={item} tone={toneFor(index)} />
+          </li>
+        ))}
+      </ul>
+
+      {/* Tablet (two columns) and desktop (three). */}
+      {[2, 3].map((count) => (
+        <div
+          key={count}
+          data-reveal="fade"
+          className={cn(
+            "testimonial-wall shell mt-(--space-block) hidden gap-4",
+            count === 2 ? "md:grid md:grid-cols-2 lg:hidden" : "lg:grid lg:grid-cols-3",
+          )}
+        >
+          {columns(items, count).map((column, c) => (
+            <div key={c} className="testimonial-col" data-reverse={c % 2 === 1 || undefined}>
+              <div className="testimonial-track" style={{ "--wall-duration": `${46 + c * 8}s` } as React.CSSProperties}>
+                {[0, 1].map((copy) => (
+                  <ul key={copy} aria-hidden={copy === 1 || undefined} className="testimonial-copy flex flex-col gap-4 pb-4">
+                    {column.map(({ item, index }) => (
+                      <li key={item.id}>
+                        <Card item={item} tone={toneFor(index)} />
+                      </li>
+                    ))}
+                  </ul>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      ))}
+    </section>
+  );
+}
+
+function Card({ item, tone }: { item: Testimonial; tone: Tone }) {
+  const coloured = tone !== "plain";
+
+  return (
+    <figure
+      className={cn(
+        "quote-card relative flex flex-col overflow-hidden rounded-card p-6 md:p-7",
+        tone === "orange" && "bg-accent text-on-accent",
+        tone === "violet" && "bg-brand-violet text-white",
+        tone === "plain" && "border border-line bg-surface",
+      )}
+    >
+      {coloured && <span aria-hidden className="quote-card__shine" />}
+      <Quote
+        aria-hidden
+        strokeWidth={1.5}
+        className={cn("relative size-7 -scale-x-100", coloured ? "opacity-60" : "text-accent-ink")}
+      />
+      <blockquote
+        className={cn(
+          "relative mt-4 font-medium tracking-[-0.02em]",
+          coloured ? "text-[1.3125rem] leading-[1.3]" : "text-[1.0625rem] leading-[1.45]",
+        )}
+      >
+        <p>{item.quote}</p>
+      </blockquote>
+      <figcaption
+        className={cn(
+          "relative mt-7 flex items-center gap-3 border-t pt-5",
+          tone === "orange" ? "border-black/15" : tone === "violet" ? "border-white/20" : "border-line",
+        )}
+      >
+        <span
+          aria-hidden
+          className={cn(
+            "inline-flex size-10 shrink-0 items-center justify-center rounded-full text-meta font-semibold",
+            tone === "orange" && "bg-on-accent text-accent",
+            tone === "violet" && "bg-white text-brand-violet",
+            tone === "plain" && "quote-avatar text-white",
+          )}
+        >
+          {initials(item.name)}
+        </span>
+        <span className="min-w-0">
+          <span className="block text-[0.9375rem] font-medium">{item.name}</span>
+          <span className={cn("block font-mono text-mono uppercase", coloured ? "opacity-70" : "text-muted")}>
+            {item.role}, {item.company}
+          </span>
+        </span>
+      </figcaption>
+    </figure>
   );
 }

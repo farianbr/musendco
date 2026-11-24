@@ -1,6 +1,6 @@
 import type { ProcessStage } from "@/types/content";
 
-/** DEMO workflow. Replace with Musendco's real process. */
+/** DEMO workflow. Replace with Muse's real process. */
 export const processStages: ProcessStage[] = [
   {
     name: "Discovery",

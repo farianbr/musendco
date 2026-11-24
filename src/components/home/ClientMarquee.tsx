@@ -4,9 +4,9 @@ import { ClientMark } from "@/components/ui/ClientMark";
 import { cn } from "@/lib/cn";
 
 const ROWS = [
-  { start: 0, reverse: false, duration: "46s" },
-  { start: 3, reverse: true, duration: "54s" },
-  { start: 5, reverse: false, duration: "50s" },
+  { start: 0, reverse: false, duration: "70s" },
+  { start: 7, reverse: true, duration: "82s" },
+  { start: 13, reverse: false, duration: "76s" },
 ];
 
 /** Stacked rows drift in opposite directions and fade out at both edges. */
@@ -32,7 +32,7 @@ export function ClientMarquee() {
               style={{ "--marquee-duration": row.duration } as React.CSSProperties}
             >
               <div className="marquee-track flex w-max">
-                {[0, 1, 2, 3].map((copy) => (
+                {[0, 1].map((copy) => (
                   <div key={copy} className="flex shrink-0 items-center gap-14 pr-14 md:gap-20 md:pr-20">
                     {ordered.map((client) => (
                       <span key={client.name} className="text-muted transition-colors duration-(--dur) hover:text-fg">

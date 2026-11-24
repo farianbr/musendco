@@ -20,8 +20,8 @@ export function SelectedWork() {
       </div>
 
       <div className="flex justify-center pt-8" data-reveal="fade">
-        <ButtonLink href="/work" variant="secondary" arrow>
-          See all projects
+        <ButtonLink href="/services" variant="secondary" arrow>
+          Explore all services
         </ButtonLink>
       </div>
     </section>

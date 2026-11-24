@@ -11,14 +11,14 @@ import {
 } from "motion/react";
 import { cn } from "@/lib/cn";
 import { Wordmark } from "@/components/ui/Wordmark";
-import { ButtonLink } from "@/components/ui/ButtonLink";
 import { SiteMenu } from "./SiteMenu";
 import { ThemeToggle } from "./ThemeToggle";
 
 /**
  * Fixed header. Gains a translucent backing once the page scrolls (for
  * legibility over imagery) and slides away while scrolling down, returning on
- * the way up. Navigation lives in the site menu behind the centre pill.
+ * the way up. Navigation lives in the site menu behind the orange pill on
+ * the right, which stays put while the menu is open so it can close it.
  */
 export function Header() {
   const headerRef = useRef<HTMLElement>(null);
@@ -53,10 +53,10 @@ export function Header() {
               : "border-transparent",
           )}
         />
-        <div className="shell relative grid h-(--header-h) grid-cols-[1fr_auto_1fr] items-center gap-4">
+        <div className="shell relative flex h-(--header-h) items-center justify-between gap-4">
           <div
             className={cn(
-              "justify-self-start transition-opacity duration-(--dur-fast)",
+              "transition-opacity duration-(--dur-fast)",
               menuOpen && "pointer-events-none opacity-0",
             )}
             inert={menuOpen}
@@ -64,23 +64,17 @@ export function Header() {
             <Wordmark />
           </div>
 
-          <SiteMenu open={menuOpen} onOpenChange={setMenuOpen} containerRef={headerRef} />
-
-          <div
-            className={cn(
-              "flex items-center gap-2 justify-self-end transition-opacity duration-(--dur-fast)",
-              menuOpen && "pointer-events-none opacity-0",
-            )}
-            inert={menuOpen}
-          >
-            <span className="hidden sm:contents">
-              <ThemeToggle />
-            </span>
-            <span className="hidden md:contents">
-              <ButtonLink href="/contact" size="small" arrow>
-                Start a project
-              </ButtonLink>
-            </span>
+          <div className="flex items-center gap-2.5">
+            <div
+              className={cn(
+                "hidden transition-opacity duration-(--dur-fast) sm:block",
+                menuOpen && "pointer-events-none opacity-0",
+              )}
+              inert={menuOpen}
+            >
+              <ThemeToggle className="size-11" />
+            </div>
+            <SiteMenu open={menuOpen} onOpenChange={setMenuOpen} containerRef={headerRef} />
           </div>
         </div>
       </m.header>

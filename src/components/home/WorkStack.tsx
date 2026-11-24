@@ -14,6 +14,7 @@ import {
 import { ArrowRight } from "lucide-react";
 import type { Project } from "@/types/content";
 import { ProjectMorph } from "@/components/motion/PageTransition";
+import { FitImage } from "@/components/ui/FitImage";
 
 /**
  * Colour-blocked project cards in a sticky stack. Each card pins under the
@@ -82,7 +83,7 @@ function StackCard({ project, index, isLast }: { project: Project; index: number
               </span>
               <span className="min-w-0 flex-1 leading-tight">
                 <Link
-                  href={`/work/${project.slug}`}
+                  href={`/services/${project.slug}`}
                   prefetch
                   className="block truncate text-[0.875rem] font-medium after:absolute after:inset-0 after:z-10 after:content-['']"
                 >
@@ -102,13 +103,7 @@ function StackCard({ project, index, isLast }: { project: Project; index: number
             <ProjectMorph slug={project.slug}>
               <div className="absolute inset-0">
                 <m.div className="absolute inset-0" style={reduce ? undefined : { scale: imageScale }}>
-                  <Image
-                    src={project.cover.src}
-                    alt={project.cover.alt}
-                    fill
-                    sizes="(min-width: 1024px) 46vw, 100vw"
-                    className="media-zoom object-cover"
-                  />
+                  <FitImage image={project.cover} sizes="(min-width: 1024px) 46vw, 100vw" className="media-zoom" />
                 </m.div>
               </div>
             </ProjectMorph>

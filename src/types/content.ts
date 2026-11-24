@@ -16,7 +16,7 @@ export type Project = {
   title: string;
   /** Only set when the source names the client. */
   client?: string;
-  /** Primary discipline. Also drives the filter on /work. */
+  /** Primary discipline. Also the service filter on /services. */
   discipline: Discipline;
   year: number;
   /** One line used on cards. */
@@ -31,8 +31,6 @@ export type Project = {
   links?: { label: string; href: string }[];
   /** Solid card colour on the home page's selected-work stack. Dark ink sits on it. */
   tint?: string;
-  /** Shown in the hero gallery. Never also featured, so the home page does not repeat itself. */
-  hero?: boolean;
   /** How the work came about. Left unset where the source does not say. */
   kind?: ProjectKind;
   blocks: CaseStudyBlock[];
@@ -43,22 +41,11 @@ export type Project = {
 export type ProjectKind = "Client" | "Self-initiated" | "Academic" | "Concept" | "Sample";
 
 export type Discipline =
-  | "Websites"
   | "Branding"
+  | "SaaS & Websites"
   | "Packaging"
-  | "Print & editorial"
-  | "Illustration & type"
-  | "Social & campaign"
-  | "Photo & retouching";
-
-export type Service = {
-  slug: string;
-  name: string;
-  value: string;
-  description: string[];
-  deliverables: string[];
-  image: ImageAsset;
-};
+  | "Social Media & Thumbnails"
+  | "Illustration";
 
 export type ProcessStage = {
   name: string;
@@ -80,13 +67,6 @@ export type Testimonial = {
   name: string;
   role: string;
   company: string;
-};
-
-export type TeamMember = {
-  name: string;
-  role: string;
-  focus: string;
-  photo: ImageAsset;
 };
 
 export type Faq = {

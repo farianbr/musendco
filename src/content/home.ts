@@ -1,24 +1,28 @@
 /** Homepage copy. DRAFT, awaiting agency approval. */
 export const home = {
   hero: {
-    headline: { lead: "Work that holds up to a", emphasis: "second look." },
+    eyebrow: "We are Muse",
+    headline: { lead: "Work worth a", emphasis: "second look" },
     intro:
-      "Musendco is a creative agency for brand identity, digital products and websites. Strategy, design and engineering in one team.",
+      "Muse builds brand identities, packaging, campaigns and websites for businesses that want to be remembered. Based in Luton, UK, working worldwide.",
   },
   trusted: {
-    heading: "Trusted by brands in Bangladesh and the Netherlands",
+    heading: "Trusted by brands around the world",
   },
   work: {
-    eyebrow: "Selected work",
-    lead: "Proven work in",
-    emphasis: "every discipline",
+    eyebrow: "Services",
+    lead: "Five services,",
+    emphasis: "proven in the work",
   },
   stats: {
     eyebrow: "Stats",
     intro: "No borrowed benchmarks. Every figure here is counted from the projects on this site, so you can check each one yourself.",
   },
   services: {
-    heading: "What we do",
+    eyebrow: "Services",
+    lead: "What we",
+    emphasis: "do best",
+    intro: "Four ways in, one team throughout. Open a service to see the work behind it and what you walk away with.",
   },
   manifesto:
     "We would rather make fewer things properly than many things quickly. Every project gets research, a clear idea, careful craft and a proper finish.",
@@ -26,8 +30,16 @@ export const home = {
     heading: "How a project runs",
     intro: "A clear structure, so you always know where the work is and what comes next.",
   },
+  about: {
+    eyebrow: "About us",
+    lead: "A studio in Luton,",
+    emphasis: "working with the world",
+  },
   testimonials: {
-    heading: "What clients say",
+    eyebrow: "Testimonials",
+    lead: "Kind words from the people",
+    emphasis: "we make things with",
+    intro: "Founders, marketers and makers on what it is like to work with Muse, and what changed after.",
   },
   closing: {
     heading: "Have something worth making?",

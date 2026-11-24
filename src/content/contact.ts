@@ -1,9 +1,9 @@
-import { services } from "./services";
+import { disciplines } from "./disciplines";
 
 /** Options for the inquiry form. Shared by the form UI and server validation. */
-export const projectTypes = [...services.map((s) => s.name), "Something else"];
+export const projectTypes = [...disciplines, "Something else"];
 
-/** UNCONFIRMED ranges and currency. Confirm with Musendco or remove the field. */
+/** UNCONFIRMED ranges and currency. Confirm with Muse or remove the field. */
 export const budgetRanges = [
   "Under $10k",
   "$10k to $25k",

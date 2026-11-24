@@ -4,25 +4,22 @@
 
 | Asset | Location | Status |
 | --- | --- | --- |
-| Behance projects (31) | `public/projects/<slug>/{cover,portrait,NN}.webp` | **Real**, covers and galleries from Behance |
-| Team photos | `public/team/<name>.webp` | **Real**, supplied by the studio |
-| Behance gallery fetcher | `scripts/fetch-behance-galleries.mjs` | Tooling: writes `NN.webp` and `src/content/project-galleries.json` |
-| Behance cover fetcher | `scripts/fetch-behance-covers.mjs` | Tooling: cover.webp (max 2000px) + portrait.webp (4:5 attention crop) |
-| Website projects (4) | `public/projects/{think-space,merqetia,kendro,subscription-manager}/` | **Real**, from farian.me via `scripts/fetch-website-projects.mjs` |
+| Projects (15, curated) | `public/projects/<slug>/{cover,portrait,NN}.webp`; gallery sizes in `src/content/project-galleries.json` | **Real** (Behance and farian.me). Add new ones by hand; the old fetch scripts were removed |
+| Founder photo | `public/about/showaeb-bhuyan-shuvo.webp` | **Real**, supplied |
+| 3D mark | `public/brand/muse-3d.webp` (offline three.js render, transparent) | Live |
 | Service images (4) | `public/services/<slug>.webp` | **Demo** |
-| Demo fetch script | `scripts/fetch-demo-images.mjs` | Service images only |
 | Client marks | `src/components/ui/ClientMark.tsx` (geometric glyph + name) | **Demo**, generated |
-| Wordmark | `src/components/ui/Wordmark.tsx` (typeset) | Temporary |
-| Icon | `src/app/icon.svg` | Temporary |
+| Wordmark | `src/components/ui/Wordmark.tsx` (supplied logo, inline SVG) | Live |
+| Icon | `src/app/icon.svg` (orange mark on a white circle) | Live |
 | Social card | `src/app/opengraph-image.tsx` (generated, dark) | Live |
-| Fonts | Schibsted Grotesk, Geist Mono via `next/font/google` (self-hosted at build, SIL OFL) | Approved for build |
+| Fonts | Helvetica Neue via the system font stack (`--font-sans` in globals.css). Licensed, so not bundled: Apple devices render it, others fall back to Helvetica/Arial. To ship it everywhere, add licensed woff2 files in `src/app/fonts/` and load them with `next/font/local`. | Needs licence for webfont |
+| Logo | `public/brand/muse-logo-dark.svg` (dark letters, light backgrounds), `muse-logo-light.svg` (white letters), `muse-icon.svg` | Supplied |
 
 ## Demo photography
 
 Downloaded once from picsum.photos (seeded, so re-runs return the same frames) and stored locally, so the site has no runtime dependency on a third party. The script applies one shared grade (saturation 0.82, slight contrast) so unrelated frames read as one set. The photos are generic stock frames, **not** project work.
 
-- Re-download: `node scripts/fetch-demo-images.mjs`
-- Swap one image: add an entry to `SEEDS` in the script (key `"<slug>/<name>"`) and re-run.
+- Swap one image: replace the file in `public/services/` (same name) or update `src/content/services.ts`.
 - Alt text in `src/content/*.ts` describes what each photo actually shows. Update it when an image changes.
 
 ## Sizes for real imagery

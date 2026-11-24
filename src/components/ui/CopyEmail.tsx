@@ -48,7 +48,7 @@ export function CopyEmail({ email, className }: { email: string; className?: str
               className="inline-flex"
             >
               {copied ? (
-                <Check aria-hidden strokeWidth={2} className="size-4 text-accent" />
+                <Check aria-hidden strokeWidth={2} className="size-4 text-accent-ink" />
               ) : (
                 <Copy aria-hidden strokeWidth={1.75} className="size-4" />
               )}
