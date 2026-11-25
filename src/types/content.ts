@@ -57,11 +57,13 @@ export type ProcessStage = {
 export type Client = {
   name: string;
   /**
-   * The client's own logo as a one-colour mask (black on transparent, in
-   * public/clients) so it can take the text colour. Without one, the name is
-   * typeset instead. `scale` nudges the optical size of a single logo.
+   * The client's own logo in full colour (transparent PNG in public/clients),
+   * `src` for the light theme and `dark` for the dark theme when the two
+   * differ. A logo that is one colour of ink (black on white) is set `mono`:
+   * `src` is then a mask painted in the text colour, so it follows the theme.
+   * Without a logo, the name is typeset. `scale` nudges the optical size.
    */
-  logo?: { src: string; width: number; height: number; scale?: number };
+  logo?: { src: string; dark?: string; width: number; height: number; scale?: number; mono?: boolean };
 };
 
 export type Testimonial = {

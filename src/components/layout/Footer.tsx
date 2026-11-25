@@ -1,13 +1,11 @@
 import Link from "next/link";
-import { cacheLife } from "next/cache";
 import { ArrowUpRight } from "lucide-react";
 import { navigation, site } from "@/content/site";
 import { MuseLetters } from "@/components/ui/Brand";
+import { getCurrentYear } from "@/lib/record";
 
 async function CopyrightYear() {
-  "use cache";
-  cacheLife("days");
-  return <>{new Date().getFullYear()}</>;
+  return <>{await getCurrentYear()}</>;
 }
 
 /**

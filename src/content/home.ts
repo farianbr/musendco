@@ -1,7 +1,6 @@
 /** Homepage copy. DRAFT, awaiting agency approval. */
 export const home = {
   hero: {
-    eyebrow: "We are Muse",
     headline: { lead: "Work worth a", emphasis: "second look" },
     intro:
       "Muse builds brand identities, packaging, campaigns and websites for businesses that want to be remembered. Based in Luton, UK, working worldwide.",

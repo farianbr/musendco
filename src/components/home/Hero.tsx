@@ -15,7 +15,7 @@ const smallButton =
  * on the bottom edge.
  */
 export function Hero() {
-  const { eyebrow, headline, intro } = home.hero;
+  const { headline, intro } = home.hero;
   const founded = Math.min(...projects.map((p) => p.year));
 
   return (
@@ -40,17 +40,9 @@ export function Hero() {
 
       <div className="shell relative flex flex-1 flex-col justify-center pt-[calc(var(--header-h)+2rem)] pb-28">
         <div className="max-w-[50rem]">
-          <p
-            className="enter-fade inline-flex items-center gap-2 font-mono text-mono text-fg-2 uppercase"
-            style={{ "--delay": "120ms" } as React.CSSProperties}
-          >
-            [ {eyebrow} ]
-            <ArrowRight aria-hidden strokeWidth={2} className="size-3.5" />
-          </p>
-
           <h1
             id="hero-heading"
-            className="enter-words mt-5 text-[clamp(2.5rem,1.2rem+4.4vw,5.75rem)] leading-[0.94] font-medium tracking-[-0.045em] uppercase"
+            className="enter-words text-[clamp(2.5rem,1.2rem+4.4vw,5.75rem)] leading-[0.94] font-medium tracking-[-0.045em] uppercase"
           >
             <SplitWords parts={headline.lead} />
             <br />

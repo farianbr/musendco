@@ -11,7 +11,7 @@ All copy and data live in `src/content/`. Components hold only short UI labels.
 | `site.ts` | Name, tagline, description, email, location, social links, `demoContent` flag, navigation | Email UNCONFIRMED; location and social links from Behance |
 | `home.ts` | Hero, section headings, manifesto, closing copy | Draft |
 | `projects.ts` | 31 Behance projects with galleries, 4 websites | **Real**. Taglines come from each gallery. `kind` is unset where the source does not say |
-| `people.ts` | 6 named clients (generated marks), 2 team members, 4 testimonials, 5 FAQs | Clients and team **real**; testimonials and FAQs **demo** |
+| `people.ts` | 22 brand partners (colour logos), 15 testimonials (each tied to a brand partner by name, type-checked, and describing the work done for it), 5 FAQs | Clients **real**; testimonial quotes and people and FAQs **demo** |
 | `services.ts` | 4 services with value, description, deliverables, image | Demo / unconfirmed |
 | `process.ts` | 5 stages with duration and outcome | Demo / unconfirmed |
 | `about.ts` | Intro, point of view, principles, studio images | Draft |

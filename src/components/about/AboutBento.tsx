@@ -3,15 +3,15 @@ import { clients } from "@/content/people";
 import { disciplines, projects } from "@/content/projects";
 import { site } from "@/content/site";
 import { MuseMark } from "@/components/ui/Brand";
+import { getRecord } from "@/lib/record";
 import { Globe } from "./Globe";
 
 /**
  * About bento (after wearestokt.com): three stat tiles, the studio mark, and
  * the "Based in" tile with the interactive globe. Shared by Home and About.
  */
-export function AboutBento({ stats: showStats = true }: { stats?: boolean }) {
-  const years = new Set(projects.map((p) => p.year));
-  const firstYear = Math.min(...years);
+export async function AboutBento({ stats: showStats = true }: { stats?: boolean }) {
+  const { firstYear, yearsOnRecord } = await getRecord();
   const stats = [
     { label: "Projects", value: String(projects.length).padStart(2, "0"), note: "Curated, not counted" },
     { label: "Services", value: String(disciplines.length).padStart(2, "0"), note: "One team across all of them" },
@@ -44,7 +44,7 @@ export function AboutBento({ stats: showStats = true }: { stats?: boolean }) {
         <div className="relative">
           <p className="text-[0.9375rem] font-medium">{site.legalName}</p>
           <p className="mt-0.5 text-meta text-fg-2">
-            Publishing work since {firstYear}. {years.size} years on record.
+            Publishing work since {firstYear}. {yearsOnRecord} years on record.
           </p>
           <Link href="/services" className="footer-link mt-2 inline-flex min-h-8 items-center text-meta font-medium">
             See the work

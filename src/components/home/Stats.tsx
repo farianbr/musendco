@@ -3,18 +3,8 @@ import { clients } from "@/content/people";
 import { disciplines, projects } from "@/content/projects";
 import { ClientMark } from "@/components/ui/ClientMark";
 import { SplitWords } from "@/components/ui/SplitWords";
+import { getRecord } from "@/lib/record";
 import { GrowthChart, RollingNumber } from "./StatsMotion";
-
-/** Everything here is derived from the content files, so it cannot drift from the site. */
-function getStats() {
-  const years = [...new Set(projects.map((p) => p.year))].sort((a, b) => a - b);
-  let total = 0;
-  const growth = years.map((year) => {
-    total += projects.filter((p) => p.year === year).length;
-    return { year, total };
-  });
-  return { years, growth };
-}
 
 function Card({ className, children }: { className: string; children: React.ReactNode }) {
   return (
@@ -42,8 +32,12 @@ function Label({ plain, accent }: { plain: string; accent: string }) {
   );
 }
 
-export function Stats() {
-  const { years, growth } = getStats();
+/**
+ * Every figure is derived from the content files and today's date (see
+ * src/lib/record.ts), so none can drift from the site or go stale.
+ */
+export async function Stats() {
+  const { firstYear, yearsOnRecord, growth } = await getRecord();
 
   return (
     <section aria-labelledby="stats-heading" className="shell pt-(--space-section)">
@@ -75,17 +69,17 @@ export function Stats() {
         </Card>
 
         <Card className="md:col-span-3">
-          <Figure plain={String(years.length)} accent=" yrs" />
+          <Figure plain={String(yearsOnRecord)} accent=" yrs" />
           <Label plain="Years" accent="on record" />
           <p className="mt-2 text-[0.9375rem] text-fg-2">
-            Published every year.
+            From the first project to today.
             <br />
             Still going.
           </p>
           <div className="mt-auto pt-6">
             <div className="flex items-center justify-center gap-2 rounded-media bg-raised px-4 py-5">
               <span className="text-meta text-muted">since</span>
-              <RollingNumber value={String(years[0])} />
+              <RollingNumber value={String(firstYear)} />
             </div>
           </div>
         </Card>

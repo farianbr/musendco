@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 /**
- * A tool's own logo, in full colour (public/tools, from svgl.app, which tracks
+ * A tool's own logo, in full colour (public/tools, from svgl.app or Simple Icons, which track
  * each brand's current mark). Every file reads on both themes; a one-colour
  * mark is set `mono` and painted in the text colour instead, so it follows
  * the theme without a second file.
@@ -14,9 +14,18 @@ const TOOLS: Tool[] = [
   { name: "Adobe Illustrator", src: "/tools/illustrator.svg" },
   { name: "Adobe InDesign", src: "/tools/indesign.svg" },
   { name: "Adobe After Effects", src: "/tools/after-effects.svg" },
+  { name: "Adobe Premiere Pro", src: "/tools/premiere-pro.svg" },
   { name: "Adobe Lightroom", src: "/tools/lightroom.svg" },
   { name: "Figma", src: "/tools/figma.svg" },
+  { name: "Framer", src: "/tools/framer.svg", mono: true },
   { name: "Blender", src: "/tools/blender.svg" },
+  { name: "Cinema 4D", src: "/tools/cinema4d.svg", mono: true },
+  { name: "ChatGPT", src: "/tools/openai.svg", mono: true },
+  { name: "Claude", src: "/tools/claude.svg" },
+  { name: "Gemini", src: "/tools/gemini.svg" },
+  { name: "Midjourney", src: "/tools/midjourney.svg", mono: true },
+  { name: "GitHub Copilot", src: "/tools/copilot.svg", mono: true },
+  { name: "VS Code", src: "/tools/vscode.svg" },
   { name: "React", src: "/tools/react.svg" },
   { name: "Next.js", src: "/tools/nextjs.svg" },
   { name: "TypeScript", src: "/tools/typescript.svg" },
@@ -25,6 +34,8 @@ const TOOLS: Tool[] = [
   { name: "Vite", src: "/tools/vite.svg" },
   { name: "PostgreSQL", src: "/tools/postgresql.svg" },
   { name: "Socket.IO", src: "/tools/socketio.svg", mono: true },
+  { name: "Python", src: "/tools/python.svg" },
+  { name: "Java", src: "/tools/java.svg" },
 ];
 
 function Logo({ tool }: { tool: Tool }) {
@@ -68,7 +79,7 @@ export function Toolbox() {
         <p className="mt-0.5 text-meta text-fg-2">Mastered for every project.</p>
       </div>
       <div className="marquee marquee-fade -my-10 overflow-hidden py-10">
-        <div className="marquee-track flex w-max" style={{ "--marquee-duration": "48s" } as React.CSSProperties}>
+        <div className="marquee-track flex w-max" style={{ "--marquee-duration": "84s" } as React.CSSProperties}>
           {[0, 1].map((copy) => (
             <ul
               key={copy}

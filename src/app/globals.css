@@ -143,6 +143,15 @@
     overflow-x: clip;
   }
 
+  /* The page still scrolls (wheel, touch, keys); the scrollbar is just not
+     drawn. */
+  html {
+    scrollbar-width: none;
+  }
+  html::-webkit-scrollbar {
+    display: none;
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
@@ -453,6 +462,14 @@
 
 .marquee-fade {
   mask-image: linear-gradient(90deg, transparent, black 14%, black 86%, transparent);
+}
+
+/* Client logos in colour: each theme shows its own file (ClientMark). */
+.client-logo {
+  background: var(--logo-dark) center / contain no-repeat;
+}
+:root[data-theme="light"] .client-logo {
+  background-image: var(--logo);
 }
 
 @media (prefers-reduced-motion: reduce) {
