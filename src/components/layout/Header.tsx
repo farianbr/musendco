@@ -60,6 +60,10 @@ export function Header() {
       <m.header
         ref={headerRef}
         onFocusCapture={() => setHidden(false)}
+        // `y`, not a `transform` string: at rest Motion then leaves the header
+        // with no transform at all. Any transform here (even translateY(0))
+        // makes the header the box the full-screen menu panel is fixed to,
+        // and the panel collapses into the 64px bar.
         animate={{ y: isHidden ? "-100%" : "0%" }}
         transition={reduce ? { duration: 0 } : { duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
         className={cn("site-header fixed inset-x-0 top-0 z-50", menuMounted && "menu-layer")}

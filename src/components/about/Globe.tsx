@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { geoEquirectangular, geoPath } from "d3-geo";
 import { feature } from "topojson-client";
+import { TOUCH_QUERY } from "@/lib/use-media-query";
 import type { FeatureCollection, MultiPolygon, Polygon, Position } from "geojson";
 import type { GeometryCollection, Topology } from "topojson-specification";
 
@@ -163,6 +164,7 @@ export function Globe({ location, className }: { location: [number, number]; cla
     if (!canvas) return;
     const ctx = canvas.getContext("2d")!;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const halfRate = window.matchMedia(TOUCH_QUERY).matches;
     const [lat, lon] = location;
     const marker: number[] = [];
     toVec(lon, lat, marker);
@@ -247,27 +249,27 @@ export function Globe({ location, className }: { location: [number, number]; cla
       ctx.lineWidth = 0.7 * dpr;
       ctx.stroke();
 
-      // Land dots, batched into four brightness bands that fade towards the limb.
+      // Land dots, batched into four brightness bands that fade towards the
+      // limb. One pass over the ~18k dots fills all four paths (it used to
+      // walk every dot once per band, four times a frame).
       const d = 1.15 * dpr;
       const half = d / 2;
       ctx.fillStyle = colours.ink;
+      const bands = [new Path2D(), new Path2D(), new Path2D(), new Path2D()];
+      for (let i = 0; i < dots.length; i += 3) {
+        const x = dots[i];
+        const y = dots[i + 1];
+        const z = dots[i + 2];
+        const z1 = -x * sa + z * ca;
+        const z2 = y * sb + z1 * cb;
+        if (z2 <= 0.02) continue;
+        const x1 = x * ca + z * sa;
+        const y2 = y * cb - z1 * sb;
+        bands[Math.min(3, Math.floor(z2 * 4))].rect(cx + r * x1 - half, cy - r * y2 - half, d, d);
+      }
       for (let band = 0; band < 4; band++) {
-        const lo = band / 4;
-        const hi = (band + 1) / 4;
-        ctx.beginPath();
-        for (let i = 0; i < dots.length; i += 3) {
-          const x = dots[i];
-          const y = dots[i + 1];
-          const z = dots[i + 2];
-          const z1 = -x * sa + z * ca;
-          const z2 = y * sb + z1 * cb;
-          if (z2 <= 0.02 || z2 < lo || z2 >= hi) continue;
-          const x1 = x * ca + z * sa;
-          const y2 = y * cb - z1 * sb;
-          ctx.rect(cx + r * x1 - half, cy - r * y2 - half, d, d);
-        }
-        ctx.globalAlpha = 0.2 + 0.5 * (lo + 0.125);
-        ctx.fill();
+        ctx.globalAlpha = 0.2 + 0.5 * (band / 4 + 0.125);
+        ctx.fill(bands[band]);
       }
 
       // Coastlines and limb.
@@ -310,11 +312,20 @@ export function Globe({ location, className }: { location: [number, number]; cla
 
     const clampPitch = (value: number) => Math.max(-85, Math.min(85, value));
 
+    // The loop stops while the globe is off screen (no idle frame callbacks
+    // competing with scrolling or an arriving page) and restarts on return.
     const tick = (now: number) => {
+      if (!visible || disposed) {
+        frame = 0;
+        return;
+      }
       frame = requestAnimationFrame(tick);
+      // Touch devices draw at most 30 frames a second: the turn is slow enough
+      // that it reads the same, and the other half of the frames stay free for
+      // scrolling (a frame is ~9k dots plus the coastlines). Not while dragging.
+      if (halfRate && !dragging && now - previous < 30) return;
       const dt = Math.min(0.05, (now - previous) / 1000);
       previous = now;
-      if (!visible || disposed) return;
 
       if (!dragging) {
         // A throw's momentum decays smoothly while the idle spin eases back in.
@@ -327,6 +338,11 @@ export function Globe({ location, className }: { location: [number, number]; cla
         rotation.pitch = clampPitch(rotation.pitch + velocity.pitch * dt);
       }
       draw(now);
+    };
+    const startLoop = () => {
+      if (frame || disposed) return;
+      previous = performance.now();
+      frame = requestAnimationFrame(tick);
     };
 
     const onDown = (event: PointerEvent) => {
@@ -375,6 +391,7 @@ export function Globe({ location, className }: { location: [number, number]; cla
     resizeObserver.observe(canvas);
     const intersection = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
+      if (visible) startLoop();
     });
     intersection.observe(canvas);
     const themeObserver = new MutationObserver(() => {
@@ -418,7 +435,7 @@ export function Globe({ location, className }: { location: [number, number]; cla
     );
     near.observe(canvas);
 
-    frame = requestAnimationFrame(tick);
+    startLoop();
 
     return () => {
       disposed = true;

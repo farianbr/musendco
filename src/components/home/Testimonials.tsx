@@ -3,6 +3,7 @@ import { home } from "@/content/home";
 import type { Testimonial } from "@/types/content";
 import { SplitWords } from "@/components/ui/SplitWords";
 import { cn } from "@/lib/cn";
+import { MediaGate } from "@/components/ui/MediaGate";
 import { TestimonialWall } from "./TestimonialWall";
 
 /** How far each plaque hangs off true, cycled through the wall. */
@@ -60,7 +61,10 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
         ))}
       </ul>
 
-      {/* Tablet (two columns) and desktop (three). */}
+      {/* Tablet (two columns) and desktop (three). Not built on phones: the
+          walls hold four more copies of every quote, ~700 DOM nodes that a
+          phone only ever hid. */}
+      <MediaGate query="(min-width: 768px)">
       {[2, 3].map((count) => (
         <TestimonialWall
           key={count}
@@ -86,6 +90,7 @@ export function Testimonials({ items }: { items: Testimonial[] }) {
           ))}
         </TestimonialWall>
       ))}
+      </MediaGate>
     </section>
   );
 }

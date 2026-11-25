@@ -19,7 +19,7 @@ const TOOLS: Tool[] = [
   { name: "Figma", src: "/tools/figma.svg" },
   { name: "Framer", src: "/tools/framer.svg", mono: true },
   { name: "Blender", src: "/tools/blender.svg" },
-  { name: "Cinema 4D", src: "/tools/cinema4d.svg", mono: true },
+  { name: "Cinema 4D", src: "/tools/cinema4d.webp" },
   { name: "ChatGPT", src: "/tools/openai.svg", mono: true },
   { name: "Claude", src: "/tools/claude.svg" },
   { name: "Gemini", src: "/tools/gemini.svg" },

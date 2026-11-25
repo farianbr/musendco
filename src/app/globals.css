@@ -172,7 +172,15 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
+  }
+
+  /* Ligatures and full kerning on every run of text slow down laying out a
+     page, which every navigation does in full. Phones skip it: Apple devices
+     kern by default anyway. */
+  @media (hover: hover) and (pointer: fine) {
+    body {
+      text-rendering: optimizeLegibility;
+    }
   }
 
   h1,
@@ -307,8 +315,8 @@
   }
 }
 
-/* An entrance plays once (EntrancesOnce marks it when it ends, or on
-   back/forward): a cached page shown again must not replay it. */
+/* An entrance plays once (EntrancesOnce marks a page's entrances as the page
+   is left): a cached page shown again must not replay it. */
 .enter-fade[data-entered],
 .enter-clip[data-entered],
 .enter-words .word > span[data-entered] {
@@ -728,6 +736,15 @@
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
+/* Touch devices: no grain. An `overlay` blend over the whole hero makes the
+   browser re-blend everything beneath it on every frame anything inside the
+   hero moves (the headline and buttons all animate in on arrival), which is
+   costly on a phone GPU. Dense phone screens show little banding anyway. */
+@media (hover: none), (pointer: coarse) {
+  .hero-grain {
+    display: none;
+  }
+}
 
 /* ---------------------------------------------------------------------------
    Project cards (after auxinlab.com/work): on hover the image sinks into a
@@ -860,6 +877,37 @@ a:hover > .footer-link {
 .footer-mark__blur > span {
   position: absolute;
   inset: 0;
+}
+
+/* Touch devices and small screens: eight stacked backdrop blurs re-sample
+   everything beneath them on every scrolled frame, which phones cannot keep up
+   with. There the mark is a picture instead: a transparent capture of this
+   exact desktop render, one per theme (public/brand/footer-mark-*.webp,
+   padding included, so the element's own padding is dropped). Recapture
+   both if the wordmark or its blur changes. */
+.footer-mark__image {
+  display: none;
+}
+@media (hover: none), (pointer: coarse), (max-width: 767px) {
+  .footer-mark {
+    padding: 0;
+  }
+  .footer-mark > :not(.footer-mark__image) {
+    display: none;
+  }
+  .footer-mark__image--dark {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  :root[data-theme="light"] .footer-mark__image--dark {
+    display: none;
+  }
+  :root[data-theme="light"] .footer-mark__image--light {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
 }
 
 /* ---------------------------------------------------------------------------

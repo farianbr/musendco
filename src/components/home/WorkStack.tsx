@@ -11,6 +11,7 @@ import {
   useTransform,
 } from "motion/react";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
+import { useMediaQuery } from "@/lib/use-media-query";
 import { ArrowRight } from "lucide-react";
 import type { Project } from "@/types/content";
 import { ProjectMorph } from "@/components/motion/PageTransition";
@@ -35,6 +36,9 @@ export function WorkStack({ projects }: { projects: Project[] }) {
 
 function StackCard({ project, index, isLast }: { project: Project; index: number; isLast: boolean }) {
   const reduce = useReducedMotion();
+  // The recede only reads while cards pin (lg and up). Below that they scroll
+  // normally, so scaling a whole card every scrolled frame bought nothing.
+  const pinned = useMediaQuery("(min-width: 1024px)");
   const cardRef = useRef<HTMLDivElement>(null);
 
   // The card recedes over the screen of scrolling that follows its pinning.
@@ -50,7 +54,7 @@ function StackCard({ project, index, isLast }: { project: Project; index: number
       style={{ top: `calc(var(--header-h) + 1rem + ${index * 10}px)` }}
     >
       <m.article
-        style={reduce ? undefined : { scale }}
+        style={reduce || !pinned ? undefined : { scale }}
         className="group relative origin-top overflow-hidden rounded-card text-[#0c0c0e]"
         data-reveal="fade"
       >
@@ -102,7 +106,9 @@ function StackCard({ project, index, isLast }: { project: Project; index: number
           <div className="relative aspect-[3/2] overflow-hidden rounded-[calc(var(--radius-card)-6px)] bg-black/10">
             <ProjectMorph slug={project.slug}>
               <div className="absolute inset-0">
-                <m.div className="absolute inset-0" style={reduce ? undefined : { scale: imageScale }}>
+                {/* Own layer (will-change): the scroll-driven zoom then moves a
+                    painted texture instead of repainting the image each frame. */}
+                <m.div className="absolute inset-0 will-change-transform" style={reduce ? undefined : { scale: imageScale }}>
                   <FitImage image={project.cover} sizes="(min-width: 1024px) 46vw, 100vw" className="media-zoom" />
                 </m.div>
               </div>

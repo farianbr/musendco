@@ -5,6 +5,7 @@ import { absoluteUrl, siteUrl } from "@/lib/site-url";
 import { Header } from "@/components/layout/Header";
 import { NavigationProgress } from "@/components/layout/NavigationProgress";
 import { EntrancesOnce } from "@/components/motion/EntrancesOnce";
+import { TouchTransitions } from "@/components/motion/TouchTransitions";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
@@ -69,7 +70,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {/* Static string, no user input. */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body id="top" className="flex min-h-dvh flex-col">
+      {/* suppressHydrationWarning: browser extensions (Grammarly and others)
+          add attributes to <body> before React loads, which React reports as
+          a hydration mismatch. This ignores attribute differences on <body>
+          itself only; everything inside is still checked. */}
+      <body id="top" className="flex min-h-dvh flex-col" suppressHydrationWarning>
         <a
           href="#main"
           className="fixed top-3 left-3 z-[70] -translate-y-24 rounded-full bg-accent px-5 py-3 text-meta font-medium text-on-accent focus:translate-y-0"
@@ -84,6 +89,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         />
         <NavigationProgress />
         <EntrancesOnce />
+        <TouchTransitions />
         <Header />
         <main id="main" className="flex-1">
           {children}

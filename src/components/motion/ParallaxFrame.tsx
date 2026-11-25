@@ -21,7 +21,9 @@ export function ParallaxFrame({ children, className }: { children: React.ReactNo
   return (
     <div ref={ref} className={cn("overflow-hidden", className)}>
       <LazyMotion features={domAnimation} strict>
-        <m.div className="origin-center" style={reduce ? undefined : { scale, y }}>
+        {/* Own layer (will-change): the scroll-driven drift moves a painted
+            texture instead of repainting a full-width image every frame. */}
+        <m.div className="origin-center will-change-transform" style={reduce ? undefined : { scale, y }}>
           {children}
         </m.div>
       </LazyMotion>

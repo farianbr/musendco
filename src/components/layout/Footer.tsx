@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { navigation, site } from "@/content/site";
@@ -109,6 +110,25 @@ export function Footer() {
       <div aria-hidden className="footer-mark">
         <MuseLetters className="footer-mark__layer footer-mark__glow" />
         <MuseLetters className="footer-mark__layer" />
+        {/* Touch and small screens: the same mark as a picture of the desktop
+            render (see .footer-mark__image). Lazy, and hidden elsewhere, so
+            only the current theme's file is ever fetched, and only there. */}
+        <Image
+          src="/brand/footer-mark-dark.webp"
+          alt=""
+          width={1290}
+          height={304}
+          unoptimized
+          className="footer-mark__image footer-mark__image--dark"
+        />
+        <Image
+          src="/brand/footer-mark-light.webp"
+          alt=""
+          width={1290}
+          height={304}
+          unoptimized
+          className="footer-mark__image footer-mark__image--light"
+        />
         <div className="footer-mark__blur">
           {BLUR_BANDS.map((band) => (
             <span key={band.blur} style={band.style} />

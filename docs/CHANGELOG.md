@@ -1,5 +1,29 @@
 # Changelog
 
+## 2026-11-26 — Mobile performance pass (paint, compositing, DOM)
+
+Aimed at iPhone Safari, where paint and GPU work cost more than Chrome emulation shows. Desktop looks the same except where noted.
+
+- **Cover backdrops**: FitImage's blurred copy behind every project cover was a live `filter: blur(40px) saturate(1.5)`, repainted whenever a card moved or scaled. It is now a tiny pre-blurred image (`public/projects/*/cover-blur.webp`, 0.2–0.9 KB each, made by `scripts/make-cover-backdrops.mjs`; rerun it after adding or replacing a cover). All screen sizes. Phone cards look marginally less blurred than before (the old 40px was heavier on small cards).
+- **Home work stack**: the scroll-driven card recede only runs at lg and up, where the cards pin; on phones it scaled whole cards every scrolled frame for no visible effect. The image zoom and the case-study parallax run on their own layer (`will-change: transform`), so scrolling moves a texture instead of repainting the image.
+- **Menu**: link and label entrances animate as whole `transform` strings, so they run on the compositor (18 style writes per opening instead of one per element per frame). The small-screen scroll mask is now a gradient overlay in the sheet colour (a mask redrew the whole panel every frame). No backdrop blur on the "Discover" pills on touch. The two case-study cards prefetch their page in full.
+- **Hero**: no film grain on touch devices (its `overlay` blend re-blended the whole hero while the headline animated in).
+- **Testimonials**: the tablet/desktop walls (four more copies of every quote, ~700 DOM nodes) are no longer built on phones (`MediaGate`, `useMediaQuery`).
+- **Globe**: one pass over the land dots per frame instead of four; 30 fps on touch devices.
+- **About gallery**: image `sizes` follow the tiles' real width; phones were downloading ~1920px files for ~300px tiles.
+- **Layout work**: EntrancesOnce no longer measures anything (it finds hidden pages by React's inline `display: none`); ProcessSteps measures from its ResizeObserver instead of forcing a layout mid-commit; `text-rendering: optimizeLegibility` applies to mouse/trackpad devices only.
+- **Testing note**: `next dev` does not prefetch and renders each page on request, so it feels slow on a phone by design. Test phone performance against `npm run build` + `next start -H 0.0.0.0`.
+
+## 2026-11-25 — Smoother navigation on phones, Cinema 4D logo
+
+- **Touch devices, page changes**: no view transitions on phones and tablets (`TouchTransitions`). React started one on every route change, even menu navigations typed "none", which froze rendering and taps while the new page was painted twice; that freeze was the lag and the occasional "stuck" page. Desktop keeps the page fade and the project-image morph; the theme wipe still runs everywhere.
+- **Touch devices and small screens, footer**: the wordmark is a picture of the desktop render (`public/brand/footer-mark-dark.webp` / `-light.webp`: the real 1920px render captured on black and on white, transparency computed from the difference, so blur and glow match desktop exactly) instead of eight stacked backdrop blurs re-sampled every scrolled frame. Lazy, so only the current theme's file loads, and only there. Desktop is unchanged. Recapture both if the wordmark or its blur changes.
+- Measured in Chrome emulation (Pixel 7, touch, 4x CPU throttle, warmed routes, median of 5): tap to new page visible and tappable went from 840–1310 ms to 280–640 ms; main-thread long tasks per navigation roughly halved.
+- **Reveals**: RevealObserver measures every element first and marks them after, instead of interleaving reads and writes (one forced style + layout pass per element as each page arrived).
+- **Hydration error fixed** ("attributes of the server rendered HTML didn't match"): EntrancesOnce added `data-entered` when an entrance ended, and the CSS entrance can end before React hydrates that part of the page. It now marks a page's entrances only once the page has been left (hidden), so cached pages still don't replay them on return.
+- **Globe**: the animation loop stops while the globe is off screen instead of ticking idle every frame.
+- **Toolbox**: Cinema 4D shows the official full-colour mark (`public/tools/cinema4d.webp`), replacing the one-colour Simple Icons glyph.
+
 ## 2026-11-25 — Wall of fame, founder photo, hero contrast
 
 - **Toolbox**: no more doubled logos. React is one file in a mid blue that reads on both themes; Socket.IO is drawn in the text colour. The per-theme logo pairs and their CSS are gone.

@@ -155,14 +155,26 @@ export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: P
     };
   };
 
-  const settle = (delay: number, from: Record<string, number>) =>
-    reduce
-      ? {}
-      : {
-          initial: from,
-          animate: { x: 0, y: 0, scale: 1, opacity: 1 },
-          transition: { duration: 0.85, ease: EASE_POWER3, delay },
-        };
+  // Whole `transform` strings rather than x/y/scale: Motion can then hand the
+  // animation to the compositor, so the ~20 elements settling in never cost
+  // the main thread a style pass per frame (with x/y/scale it did, on a phone
+  // the bulk of the menu's opening work).
+  const settle = (delay: number, from: { x?: number; y?: number; scale?: number; opacity?: number }) => {
+    if (reduce) return {};
+    const moves = from.x !== undefined || from.y !== undefined || from.scale !== undefined;
+    const transform = (x: number, y: number, s: number) => `translate(${x}px, ${y}px) scale(${s})`;
+    return {
+      initial: {
+        ...(moves && { transform: transform(from.x ?? 0, from.y ?? 0, from.scale ?? 1) }),
+        ...(from.opacity !== undefined && { opacity: from.opacity }),
+      },
+      animate: {
+        ...(moves && { transform: transform(0, 0, 1) }),
+        ...(from.opacity !== undefined && { opacity: 1 }),
+      },
+      transition: { duration: 0.85, ease: EASE_POWER3, delay },
+    };
+  };
 
   const explore = [{ label: "Home", href: "/" }, ...navigation];
 
@@ -217,7 +229,20 @@ export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: P
               <ThemeToggle />
             </m.div>
 
-            <div className="relative h-full overflow-y-auto rounded-[32px] [scrollbar-width:none] max-lg:[mask-image:linear-gradient(transparent_3rem,black_5rem)]">
+            {/* Small screens: content scrolling up under the theme toggle fades
+                out beneath this. It used to be a mask on the scroll container,
+                which made the browser redraw the whole panel through the mask
+                on every frame of the opening animation. The sheet is solid, so
+                a gradient in its colour looks the same and costs nothing. */}
+            <m.div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-0 top-0 z-[5] h-20 rounded-t-[32px] bg-[linear-gradient(var(--bg)_3rem,transparent_5rem)] lg:hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.2, delay: reduce ? 0.15 : 0.45 }}
+            />
+
+            <div className="relative h-full overflow-y-auto rounded-[32px] [scrollbar-width:none]">
               <div className="flex min-h-full flex-col gap-8 px-4 pt-20 pb-5 lg:grid lg:grid-cols-12 lg:gap-x-6 lg:gap-y-0 lg:px-5 lg:pt-[99px] lg:pb-0">
                 {/* Promo cards. Last on small screens. */}
                 <div className="order-3 grid grid-cols-2 grid-rows-[minmax(13rem,1fr)_minmax(11rem,1fr)] gap-3.5 [perspective:1000px] lg:order-none lg:col-span-5 lg:h-[calc(100dvh-144px)] lg:min-h-[28rem]">
@@ -246,10 +271,12 @@ export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: P
                       <span className="relative text-mono text-white/70">{projects.length} projects</span>
                       <span className="relative mt-1 text-heading font-medium">Our services</span>
                       <span className="relative mt-4 inline-flex items-center gap-0.5">
-                        <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md transition-transform duration-(--dur) ease-out group-hover:translate-x-0.5">
+                        <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-white/15 backdrop-blur-md transition-transform duration-(--dur) ease-out group-hover:translate-x-0.5 pointer-coarse:backdrop-blur-none">
                           <ChevronRight aria-hidden strokeWidth={2} className="size-4" />
                         </span>
-                        <span className="inline-flex h-11 items-center rounded-2xl bg-white/15 px-5 text-meta font-medium backdrop-blur-md">
+                        {/* No backdrop blur on touch: blurring what is behind a card
+                            that is itself rising in 3D is redrawn every frame. */}
+                        <span className="inline-flex h-11 items-center rounded-2xl bg-white/15 px-5 text-meta font-medium backdrop-blur-md pointer-coarse:backdrop-blur-none">
                           Discover
                         </span>
                       </span>
@@ -259,6 +286,9 @@ export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: P
                     <m.div {...card(1)} className="min-h-0">
                       <Link
                         href={`/services/${posterProject.slug}`}
+                        // Full prefetch: a case study depends on its slug, so the
+                        // default (shared App Shell) prefetch carries none of it.
+                        prefetch
                         onClick={go(`/services/${posterProject.slug}`)}
                         transitionTypes={MENU_NAV}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#e4e3dc] p-4 text-[#0c0c0e]"
@@ -278,6 +308,7 @@ export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: P
                     <m.div {...card(2)} className="min-h-0">
                       <Link
                         href={`/services/${clientProject.slug}`}
+                        prefetch
                         onClick={go(`/services/${clientProject.slug}`)}
                         transitionTypes={MENU_NAV}
                         className="group relative block h-full overflow-hidden rounded-[24px] bg-[#4900ea] p-4 text-white"

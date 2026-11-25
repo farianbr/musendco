@@ -18,11 +18,15 @@ export function RevealObserver() {
     const elements = Array.from(
       document.querySelectorAll<HTMLElement>("[data-reveal]:not([data-revealed])"),
     );
+    // All reads, then all writes: setting an attribute between two
+    // getBoundingClientRect calls invalidates style, so each read forced a
+    // fresh style + layout pass (dozens per page, as the new page arrives).
     const viewport = window.innerHeight;
-    for (const el of elements) {
+    const onScreen = elements.filter((el) => {
       const rect = el.getBoundingClientRect();
-      if (rect.top < viewport && rect.bottom > 0) el.setAttribute("data-revealed", "");
-    }
+      return rect.top < viewport && rect.bottom > 0;
+    });
+    for (const el of onScreen) el.setAttribute("data-revealed", "");
     document.documentElement.classList.add("reveal-ready");
 
     const observer = new IntersectionObserver(

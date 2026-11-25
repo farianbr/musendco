@@ -24,6 +24,17 @@ export const metadata: Metadata = {
   openGraph: { url: "/about" },
 };
 
+/**
+ * `sizes` for a gallery tile, matching its height clamp below: 55% of the row
+ * height up to 792px wide (where `height / 14.4` vw catches up), then that vw,
+ * then the full height past 1440px. A flat "560px" made a phone download and
+ * decode ~1920px files for tiles about 300px wide.
+ */
+function tileSizes(height: number, image: { width: number; height: number }) {
+  const width = (height * image.width) / image.height;
+  return `(max-width: 792px) ${Math.round(width * 0.55)}px, (max-width: 1440px) ${(width / 14.4).toFixed(2)}vw, ${Math.round(width)}px`;
+}
+
 function GalleryRow({
   images,
   reverse,
@@ -53,7 +64,7 @@ function GalleryRow({
                   aspectRatio: `${image.width} / ${image.height}`,
                 }}
               >
-                <Image src={image.src} alt="" fill sizes="560px" className="object-cover" />
+                <Image src={image.src} alt="" fill sizes={tileSizes(height, image)} className="object-cover" />
               </div>
             ))}
           </div>

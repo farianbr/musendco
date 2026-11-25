@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   LazyMotion,
   domAnimation,
@@ -24,15 +24,19 @@ export function ProcessSteps({ stages }: { stages: ProcessStage[] }) {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start 75%", "end 60%"] });
   const [stops, setStops] = useState<number[]>(() => stages.map(() => 0));
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     const list = ref.current;
     if (!list) return;
     const measure = () => {
       const line = list.querySelector<HTMLElement>("[data-line]");
-      if (!line) return;
+      // Hidden (Next hides a page it keeps for back/forward with display:
+      // none, and the observer reports that last resize before this effect is
+      // cleaned up): nothing has a layout, so keep the last good stops.
+      if (!line || !line.offsetParent || !line.offsetHeight) return;
       const top = line.offsetTop;
       const height = line.offsetHeight;
       const dots = Array.from(list.querySelectorAll<HTMLElement>("[data-dot]"));
+      if (dots.some((dot) => !dot.offsetParent)) return;
       setStops(
         dots.map((dot) => {
           const item = dot.offsetParent as HTMLElement;
@@ -41,7 +45,9 @@ export function ProcessSteps({ stages }: { stages: ProcessStage[] }) {
         }),
       );
     };
-    measure();
+    // Measured only from the observer, whose first callback arrives once the
+    // browser has laid the page out anyway (still before paint). Measuring
+    // here too forced an extra full layout of Home in the middle of mounting it.
     const observer = new ResizeObserver(measure);
     observer.observe(list);
     return () => observer.disconnect();
