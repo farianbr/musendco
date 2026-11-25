@@ -149,6 +149,12 @@
     }
   }
 
+  /* Back/forward lands at the restored position at once; smooth scrolling
+     otherwise slid the restored page into place (data-nav: NavigationProgress). */
+  html[data-nav="history"] {
+    scroll-behavior: auto;
+  }
+
   body {
     background: var(--bg);
     color: var(--fg);
@@ -258,11 +264,13 @@
   }
 }
 
+/* No filter blur in entrances or reveals: an animated blur makes Chrome
+   re-layerize every frame, which on a phone cost ~600ms of main thread as Home
+   arrived (731ms layerize with it, 136ms without). Opacity + transform only. */
 @keyframes fade-up {
   from {
     opacity: 0;
     transform: translateY(16px);
-    filter: blur(6px);
   }
 }
 
@@ -290,6 +298,14 @@
   }
 }
 
+/* An entrance plays once (EntrancesOnce marks it when it ends, or on
+   back/forward): a cached page shown again must not replay it. */
+.enter-fade[data-entered],
+.enter-clip[data-entered],
+.enter-words .word > span[data-entered] {
+  animation: none;
+}
+
 /* Word mask used by SplitWords. Extra bottom room keeps descenders and italics. */
 .word {
   display: inline-block;
@@ -312,28 +328,24 @@
   .reveal-ready [data-reveal] {
     transition:
       opacity 1s var(--ease-out),
-      transform 1s var(--ease-out),
-      filter 1s var(--ease-out);
+      transform 1s var(--ease-out);
     transition-delay: var(--delay, 0ms);
   }
 
   .reveal-ready [data-reveal="fade"]:not([data-revealed]) {
     opacity: 0;
     transform: translateY(28px);
-    filter: blur(6px);
   }
 
   /* Children of a stagger group cascade 70ms apart. */
   .reveal-ready [data-reveal="stagger"] > * {
     transition:
       opacity 0.9s var(--ease-out),
-      transform 0.9s var(--ease-out),
-      filter 0.9s var(--ease-out);
+      transform 0.9s var(--ease-out);
   }
   .reveal-ready [data-reveal="stagger"]:not([data-revealed]) > * {
     opacity: 0;
     transform: translateY(24px);
-    filter: blur(4px);
   }
   .reveal-ready [data-reveal="stagger"] > :nth-child(2) { transition-delay: 70ms; }
   .reveal-ready [data-reveal="stagger"] > :nth-child(3) { transition-delay: 140ms; }
@@ -388,13 +400,11 @@
   .reveal-ready [data-reveal="scale"] {
     transition:
       opacity 1s var(--ease-out),
-      transform 1.4s var(--ease-out),
-      filter 1s var(--ease-out);
+      transform 1.4s var(--ease-out);
   }
   .reveal-ready [data-reveal="scale"]:not([data-revealed]) {
     opacity: 0;
     transform: scale(0.88);
-    filter: blur(10px);
   }
 }
 
@@ -491,6 +501,38 @@
 }
 
 /* ---------------------------------------------------------------------------
+   Navigation progress (NavigationProgress): a thin accent bar while the next
+   page is on its way. Transform + opacity only. It jumps ahead, then crawls on
+   a long decelerating curve towards 85%; landing fills it and fades it out.
+   --------------------------------------------------------------------------- */
+.nav-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 80;
+  height: 2px;
+  background: var(--accent);
+  box-shadow: 0 0 10px rgb(255 89 49 / 0.6);
+  transform: scaleX(0);
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-progress[data-state="loading"] {
+  opacity: 1;
+  transform: scaleX(0.85);
+  transition:
+    transform 8s cubic-bezier(0.05, 0.7, 0.1, 1),
+    opacity 120ms ease;
+}
+.nav-progress[data-state="done"] {
+  opacity: 0;
+  transform: scaleX(1);
+  transition:
+    transform 200ms var(--ease-out),
+    opacity 250ms ease 150ms;
+}
+
+/* ---------------------------------------------------------------------------
    View transitions (React <ViewTransition> + browser API)
    --------------------------------------------------------------------------- */
 ::view-transition {
@@ -534,25 +576,36 @@
 @keyframes page-out {
   to {
     opacity: 0;
-    transform: translateY(-16px);
-    filter: blur(6px);
+    transform: translateY(-8px);
   }
 }
 
 @keyframes page-in {
   from {
     opacity: 0;
-    transform: translateY(32px);
-    filter: blur(8px);
+    transform: translateY(16px);
   }
 }
 
-/* Asymmetric: old content leaves fast, new content arrives gently. */
+/* Asymmetric and nearly sequential: the old page is all but gone (160ms)
+   before the new one rises in, so the two never read as overlapping. Short
+   enough (~420ms) that quick back-and-forth taps rarely land mid-transition,
+   where the browser skips it and the page jumps. No blur: see fade-up. */
 ::view-transition-old(.page) {
-  animation: page-out 220ms var(--ease-out) both;
+  animation: page-out 160ms var(--ease-out) both;
 }
 ::view-transition-new(.page) {
-  animation: page-in 640ms var(--ease-out) 120ms both;
+  animation: page-in 280ms var(--ease-out) 140ms both;
+}
+
+/* Back/forward: no page animation. Each page returns at its own scroll
+   position, so a cross-fade showed two unrelated scroll states overlapping,
+   and on iOS it ran on top of the system's own swipe-back animation.
+   NavigationProgress sets data-nav="history" on popstate. */
+:root[data-nav="history"]::view-transition-group(*),
+:root[data-nav="history"]::view-transition-old(*),
+:root[data-nav="history"]::view-transition-new(*) {
+  animation: none !important;
 }
 
 /* Shared project image: one object moving between pages. */

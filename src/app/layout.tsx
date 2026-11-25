@@ -3,6 +3,8 @@ import localFont from "next/font/local";
 import { site } from "@/content/site";
 import { absoluteUrl, siteUrl } from "@/lib/site-url";
 import { Header } from "@/components/layout/Header";
+import { NavigationProgress } from "@/components/layout/NavigationProgress";
+import { EntrancesOnce } from "@/components/motion/EntrancesOnce";
 import { Footer } from "@/components/layout/Footer";
 import "./globals.css";
 
@@ -80,6 +82,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
           }}
         />
+        <NavigationProgress />
+        <EntrancesOnce />
         <Header />
         <main id="main" className="flex-1">
           {children}

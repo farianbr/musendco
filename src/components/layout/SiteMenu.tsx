@@ -117,9 +117,22 @@ export function SiteMenu({ open, onOpenChange, onExitComplete, containerRef }: P
   /** Click handler for menu links. Same-page targets close at once; others wait for the route. */
   const go = (href: string) => (event: React.MouseEvent) => {
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0) return;
-    const target = href.split("#")[0] || "/";
-    if (target === pathname) close();
-    else setPending(href);
+    const [target, hash] = href.split("#");
+    if ((target || "/") !== pathname) {
+      setPending(href);
+      return;
+    }
+    close();
+    if (hash !== undefined) {
+      // Same page, new fragment (e.g. /services#branding -> #illustration).
+      // The router changes the hash with pushState, which fires no hashchange,
+      // so listeners like the services filter never heard about it. Push the
+      // URL ourselves (Next syncs native history calls) and announce it.
+      event.preventDefault();
+      const oldURL = window.location.href;
+      window.history.pushState(null, "", href);
+      window.dispatchEvent(new HashChangeEvent("hashchange", { oldURL, newURL: window.location.href }));
+    }
   };
 
   /** Warm the menu's routes as soon as the pill is touched or hovered, before the links even mount. */

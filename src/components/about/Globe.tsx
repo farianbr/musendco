@@ -31,8 +31,10 @@ function pushBreak(out: number[]) {
 
 /** A lattice of points on land, as unit vectors. Land is found by rasterising it once. */
 function landDots(land: Land) {
-  const w = 1440;
-  const h = 720;
+  // 2px per degree: the lattice step (0.8deg) still spans 1.6px, so the dots are
+  // unchanged, and the pixel read-back is a quarter of a 1440x720 raster.
+  const w = 720;
+  const h = 360;
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
@@ -89,6 +91,48 @@ function graticule() {
     pushBreak(out);
   }
   return new Float32Array(out);
+}
+
+type Geometry = { dots: Float32Array<ArrayBuffer>; coast: Float32Array<ArrayBuffer> };
+
+/** Lets the browser paint and handle input between heavy steps. */
+function yieldToMain() {
+  const scheduler = (globalThis as { scheduler?: { yield?: () => Promise<void> } }).scheduler;
+  return scheduler?.yield ? scheduler.yield() : new Promise<void>((resolve) => setTimeout(resolve, 0));
+}
+
+/** Resolves once the browser is idle (or after `timeout` ms at the latest). */
+function whenIdle(timeout: number) {
+  return new Promise<void>((resolve) => {
+    if ("requestIdleCallback" in window) window.requestIdleCallback(() => resolve(), { timeout });
+    else setTimeout(resolve, 200);
+  });
+}
+
+let geometry: Promise<Geometry> | null = null;
+
+/**
+ * The map (Natural Earth 1:50m land, via world-atlas) turned into dots and
+ * coastlines, built once per session and shared. Building it took ~400ms of
+ * main thread on a phone, and it used to rerun every time a globe mounted:
+ * on each visit to Home or About, right as the page arrived, which stuttered
+ * the arrival. Now it runs once, in yielding steps.
+ */
+function loadGeometry() {
+  geometry ??= (async () => {
+    const response = await fetch("/geo/land-50m.json");
+    const topology = (await response.json()) as Topology<{ land: GeometryCollection }>;
+    await yieldToMain();
+    const land = feature(topology, topology.objects.land) as unknown as Land;
+    await yieldToMain();
+    const dots = landDots(land);
+    await yieldToMain();
+    return { dots, coast: coastlines(land) };
+  })();
+  geometry.catch(() => {
+    geometry = null; // a later globe may retry
+  });
+  return geometry;
 }
 
 function themeColours() {
@@ -346,21 +390,33 @@ export function Globe({ location, className }: { location: [number, number]; cla
     canvas.addEventListener("pointerenter", onEnter);
     canvas.addEventListener("pointerleave", onLeave);
 
-    // The map (Natural Earth 1:50m land, via world-atlas) is fetched only once a globe is on the page.
-    fetch("/geo/land-50m.json")
-      .then((response) => response.json() as Promise<Topology<{ land: GeometryCollection }>>)
-      .then((topology) => {
-        if (disposed) return;
-        const land = feature(topology, topology.objects.land) as unknown as Land;
-        dots = landDots(land);
-        coast = coastlines(land);
-        canvas.style.opacity = "1";
-        draw(performance.now());
-      })
-      .catch(() => {
-        // Without the map the globe still turns as a graticule sphere.
-        canvas.style.opacity = "1";
-      });
+    // Map geometry: instant when already built this session. Otherwise it is
+    // built only once the globe is near the screen and the browser is idle, so
+    // it never lands on the frames where a page is arriving.
+    const show = (built: Geometry | null) => {
+      if (disposed) return;
+      if (built) {
+        dots = built.dots;
+        coast = built.coast;
+      }
+      canvas.style.opacity = "1";
+      draw(performance.now());
+    };
+    const start = () =>
+      loadGeometry().then(show, () => show(null)); // without the map it still turns as a graticule sphere
+    const near = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        near.disconnect();
+        if (geometry) start();
+        else
+          whenIdle(1500).then(() => {
+            if (!disposed) start();
+          });
+      },
+      { rootMargin: "100% 0px" },
+    );
+    near.observe(canvas);
 
     frame = requestAnimationFrame(tick);
 
@@ -369,6 +425,7 @@ export function Globe({ location, className }: { location: [number, number]; cla
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
       intersection.disconnect();
+      near.disconnect();
       themeObserver.disconnect();
       canvas.removeEventListener("pointerdown", onDown);
       canvas.removeEventListener("pointermove", onMove);

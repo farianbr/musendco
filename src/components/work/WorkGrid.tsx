@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, LazyMotion, domMax, m } from "motion/react";
 import { useReducedMotion } from "@/lib/use-reduced-motion";
 import type { Discipline, Project } from "@/types/content";
@@ -21,21 +21,36 @@ export function WorkGrid({ projects, disciplines }: { projects: Project[]; disci
   const reduce = useReducedMotion();
   const filters: Filter[] = ["All", ...disciplines];
 
-  // A link like /services#packaging opens with that service selected.
+  const filterBar = useRef<HTMLDivElement>(null);
+
+  // A link like /services#packaging opens with that service selected. A later
+  // hash change on this page (the site menu's service links) switches the
+  // filter and brings the grid into view, since the visitor may be far below it.
   useEffect(() => {
-    const pick = () => {
+    const pick = (event?: HashChangeEvent) => {
       const match = disciplines.find((d) => disciplineSlug(d) === window.location.hash.slice(1));
-      if (match) setFilter(match);
+      if (!match) return;
+      setFilter(match);
+      if (event) filterBar.current?.scrollIntoView({ block: "start", behavior: reduce ? "auto" : "smooth" });
     };
     pick();
     window.addEventListener("hashchange", pick);
     return () => window.removeEventListener("hashchange", pick);
-  }, [disciplines]);
+  }, [disciplines, reduce]);
+
+  // Keep the URL in step with the chosen filter, so a menu link to the service
+  // already in the hash still counts as a change, and the address is shareable.
+  const choose = (option: Filter) => {
+    setFilter(option);
+    const hash = option === "All" ? "" : `#${disciplineSlug(option)}`;
+    window.history.replaceState(null, "", window.location.pathname + window.location.search + hash);
+  };
   const visible = filter === "All" ? projects : projects.filter((p) => p.discipline === filter);
 
   return (
     <LazyMotion features={domMax} strict>
       <div
+        ref={filterBar}
         role="group"
         aria-label="Filter projects by service"
         className="-mx-1 flex gap-1 overflow-x-auto pb-2 [scrollbar-width:none]"
@@ -48,7 +63,7 @@ export function WorkGrid({ projects, disciplines }: { projects: Project[]; disci
               key={option}
               type="button"
               aria-pressed={selected}
-              onClick={() => setFilter(option)}
+              onClick={() => choose(option)}
               className={cn(
                 "pressable relative inline-flex min-h-11 shrink-0 items-center gap-2 rounded-full px-5 text-meta font-medium",
                 selected ? "font-semibold text-on-accent" : "text-fg-2 hover:text-fg",
@@ -83,8 +98,8 @@ export function WorkGrid({ projects, disciplines }: { projects: Project[]; disci
               key={project.slug}
               className={full ? "md:col-span-2" : undefined}
               layout={!reduce}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 32, filter: "blur(6px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, transition: { duration: 0.2 } }}
               transition={{ duration: 0.7, ease: [0.23, 1, 0.32, 1], delay: reduce ? 0 : (i % 3) * 0.06 }}
             >
